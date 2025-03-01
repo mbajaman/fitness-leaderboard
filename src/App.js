@@ -1,12 +1,17 @@
 import React from 'react';
 import Leaderboard from './components/Leaderboard';
+import dumbbell from './assets/dumbbell.png';
 import './App.css';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>March Madness Fitness Challenge </h1>
+        <h1>
+          <img className="logo" src={dumbbell} alt="March Madness Fitness Challenge Logo" />
+          March Madness Fitness Challenge 
+          <img className="logo" src={dumbbell} alt="March Madness Fitness Challenge Logo" />
+        </h1>
         <p>Track your progress and compete with others!</p>
       </header>
       <main>

@@ -34,8 +34,8 @@ const Leaderboard = () => {
       // Query the leaderboard data from Supabase
       const { data, error } = await supabase
         .from('leaderboard')
-        .select('id, name, score')
-        .order('score', { ascending: false });
+        .select('id, name, scores')
+        .order('scores', { ascending: false });
       
       if (error) {
         throw error;
@@ -89,7 +89,7 @@ const Leaderboard = () => {
             <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">{entry.name}</div>
-              <div className="score">{entry.score}</div>
+              <div className="score">{entry.scores}</div>
             </div>
           ))}
         </div>
