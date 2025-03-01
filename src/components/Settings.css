@@ -3,7 +3,6 @@
   border: none;
   cursor: pointer;
   position: absolute;
-  top: 20px;
   right: 20px;
   transition: transform 0.2s ease;
 }
@@ -140,4 +139,86 @@
 
 .admin-button:hover {
   background-color: #5a6268;
+}
+
+/* Update Score Form Styles */
+.update-score-form {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 20px;
+}
+
+.update-score-form h4 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #343a40;
+  font-size: 1.2rem;
+}
+
+.message {
+  padding: 10px;
+  border-radius: 4px;
+  margin: 10px 0 15px;
+  font-size: 0.9rem;
+}
+
+.message.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.message.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.update-button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  flex: 1;
+  transition: background-color 0.2s;
+}
+
+.update-button:hover {
+  background-color: #218838;
+}
+
+.update-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 15px;
+  font-size: 1rem;
+  cursor: pointer;
+  flex: 1;
+  transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
+}
+
+.cancel-button:disabled {
+  background-color: #6c757d;
+  cursor: not-allowed;
 } 

@@ -19,9 +19,6 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <button className="settings-button" onClick={openSettings}>
-          <img src={settingsIcon} alt="Settings" />
-        </button>
         <h1>
           <img className="logo" src={dumbbell} alt="March Madness Fitness Challenge Logo" />
           March Madness Fitness Challenge 
@@ -30,6 +27,9 @@ function App() {
         <p>Track your progress and compete with others!</p>
       </header>
       <main>
+        <button className="settings-button" onClick={openSettings}>
+          <img src={settingsIcon} alt="Settings" />
+        </button>
         <Leaderboard />
       </main>
       <footer>

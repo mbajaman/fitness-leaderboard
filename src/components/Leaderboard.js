@@ -53,8 +53,7 @@ const Leaderboard = () => {
       
       // Format options
       const options = { 
-        weekday: 'long',
-        year: 'numeric', 
+        weekday: 'long', 
         month: 'short', 
         day: 'numeric',
         hour: '2-digit', 

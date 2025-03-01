@@ -8,6 +8,11 @@ const Settings = ({ isOpen, onClose }) => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [updateName, setUpdateName] = useState('');
+  const [updateScore, setUpdateScore] = useState('');
+  const [updateMessage, setUpdateMessage] = useState(null);
+  const [updateLoading, setUpdateLoading] = useState(false);
 
   const handleAuthenticate = async (e) => {
     e.preventDefault();
@@ -58,6 +63,79 @@ const Settings = ({ isOpen, onClose }) => {
     }
   };
 
+  const handleUpdateScoreClick = () => {
+    setShowUpdateForm(true);
+    setUpdateMessage(null);
+    setUpdateName('');
+    setUpdateScore('');
+  };
+
+  const handleUpdateScore = async (e) => {
+    e.preventDefault();
+    
+    if (!updateName.trim() || !updateScore.trim()) {
+      setUpdateMessage({ type: 'error', text: 'Please enter both name and score' });
+      return;
+    }
+
+    // Validate score is a number
+    const scoreNum = parseFloat(updateScore);
+    if (isNaN(scoreNum)) {
+      setUpdateMessage({ type: 'error', text: 'Score must be a number' });
+      return;
+    }
+
+    try {
+      setUpdateLoading(true);
+      setUpdateMessage(null);
+      
+      // First check if the user exists
+      const { data: userData, error: userError } = await supabase
+        .from('leaderboard')
+        .select('*')
+        .eq('name', updateName)
+        .single();
+      
+      if (userError && userError.code !== 'PGRST116') { // PGRST116 is "no rows returned"
+        throw userError;
+      }
+      
+      if (!userData) {
+        setUpdateMessage({ type: 'error', text: 'User not found. Please enter a valid name.' });
+        return;
+      }
+
+    //   const date = Date.now()
+    //   const dateString = new Date(date).toISOString()
+
+    //   console.log(dateString)
+      
+      // Update the user's score
+      const { error: updateError } = await supabase
+        .from('leaderboard')
+        .update({ scores: scoreNum })
+        .eq('name', updateName);
+      
+      if (updateError) {
+        throw updateError;
+      }
+      
+      setUpdateMessage({ type: 'success', text: `Score updated successfully for ${updateName}` });
+      setUpdateName('');
+      setUpdateScore('');
+    } catch (error) {
+      console.error('Update error:', error);
+      setUpdateMessage({ type: 'error', text: 'Failed to update score. Please try again.' });
+    } finally {
+      setUpdateLoading(false);
+    }
+  };
+
+  const handleCancelUpdate = () => {
+    setShowUpdateForm(false);
+    setUpdateMessage(null);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -94,9 +172,69 @@ const Settings = ({ isOpen, onClose }) => {
           <div className="settings-content">
             <h3>Admin Panel</h3>
             <p>You are now authenticated as an admin.</p>
-            <div className="admin-actions">
-              <button className="admin-button">Update Scores</button>
-            </div>
+            
+            {!showUpdateForm ? (
+              <div className="admin-actions">
+                <button 
+                  className="admin-button"
+                  onClick={handleUpdateScoreClick}
+                >
+                  Update Scores
+                </button>
+              </div>
+            ) : (
+              <div className="update-score-form">
+                <h4>Update User Score</h4>
+                <form onSubmit={handleUpdateScore}>
+                  <div className="form-group">
+                    <label htmlFor="update-name">User Name</label>
+                    <input
+                      type="text"
+                      id="update-name"
+                      value={updateName}
+                      onChange={(e) => setUpdateName(e.target.value)}
+                      placeholder="Enter user name"
+                      disabled={updateLoading}
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="update-score">New Score</label>
+                    <input
+                      type="text"
+                      id="update-score"
+                      value={updateScore}
+                      onChange={(e) => setUpdateScore(e.target.value)}
+                      placeholder="Enter new score"
+                      disabled={updateLoading}
+                    />
+                  </div>
+                  
+                  {updateMessage && (
+                    <p className={`message ${updateMessage.type}`}>
+                      {updateMessage.text}
+                    </p>
+                  )}
+                  
+                  <div className="form-buttons">
+                    <button 
+                      type="submit" 
+                      className="update-button"
+                      disabled={updateLoading}
+                    >
+                      {updateLoading ? 'Updating...' : 'Update'}
+                    </button>
+                    <button 
+                      type="button" 
+                      className="cancel-button"
+                      onClick={handleCancelUpdate}
+                      disabled={updateLoading}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              </div>
+            )}
           </div>
         )}
       </div>
