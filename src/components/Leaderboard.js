@@ -3,28 +3,14 @@ import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
 
 const Leaderboard = () => {
-  // Sample data that you can use before connecting to Supabase
-  const sampleData = [
-    { id: 1, name: "John Doe", score: 1250 },
-    { id: 2, name: "Jane Smith", score: 1100 },
-    { id: 3, name: "Alex Johnson", score: 950 },
-    { id: 4, name: "Sarah Williams", score: 820 },
-    { id: 5, name: "Michael Brown", score: 780 },
-    { id: 6, name: "Emily Davis", score: 720 },
-    { id: 7, name: "Robert Wilson", score: 650 },
-    { id: 8, name: "Jessica Taylor", score: 600 },
-    { id: 9, name: "David Martinez", score: 550 },
-    { id: 10, name: "Jennifer Anderson", score: 500 }
-  ];
-
-  const [leaderboardData, setLeaderboardData] = useState(sampleData); // Use sample data initially
+  const [leaderboardData, setLeaderboardData] = useState([]); // Use sample data initially
+  const [lastUpdated, setLastUpdated] = useState(null);
   const [loading, setLoading] = useState(false); // Set to false since we're using sample data
   const [error, setError] = useState(null);
-
-  // Uncomment this useEffect when you're ready to fetch from Supabase
-  
+ 
   useEffect(() => {
     fetchLeaderboardData();
+    updateLastUpdated();
   }, []);
 
   const fetchLeaderboardData = async () => {
@@ -49,7 +35,38 @@ const Leaderboard = () => {
       setLoading(false);
     }
   };
+
+  const updateLastUpdated = async () => {
+    const lastUpdated = await supabase.from('leaderboard').select('updated_at').order('updated_at', { ascending: false }).limit(1);
+    setLastUpdated(lastUpdated);
+  };
   
+  // Format date and time in a nice, readable format
+  const formatDateTime = (dateTimeStr) => {
+    if (!dateTimeStr) return 'N/A';
+    
+    try {
+      const date = new Date(dateTimeStr);
+      
+      // Check if date is valid
+      if (isNaN(date.getTime())) return 'Invalid date';
+      
+      // Format options
+      const options = { 
+        weekday: 'long',
+        year: 'numeric', 
+        month: 'short', 
+        day: 'numeric',
+        hour: '2-digit', 
+        minute: '2-digit'
+      };
+      
+      return date.toLocaleString('en-US', options);
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return 'Date format error';
+    }
+  };
 
   // Function to get medal class based on rank
   const getMedalClass = (index) => {
@@ -70,7 +87,15 @@ const Leaderboard = () => {
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
-      
+      {lastUpdated && lastUpdated.data && lastUpdated.data[0] && (
+        <div className="last-updated-container">
+          <span className="last-updated-icon">🕒</span>
+          <span className="last-updated-text">
+            Last updated: <span className="last-updated-date">{formatDateTime(lastUpdated.data[0].updated_at)}</span>
+          </span>
+        </div>
+      )}
+
       {loading ? (
         <p className="loading">Loading leaderboard data...</p>
       ) : error ? (
@@ -96,7 +121,10 @@ const Leaderboard = () => {
       )}
       
       {/* Uncomment this when you're ready to fetch from Supabase */}
-      <button className="refresh-button" onClick={fetchLeaderboardData} disabled={loading}>
+      <button className="refresh-button" onClick={() => {
+        fetchLeaderboardData();
+        updateLastUpdated();
+      }} disabled={loading}>
         {loading ? 'Refreshing...' : 'Refresh Leaderboard'}
       </button>
     </div>

@@ -6,9 +6,41 @@
 
 .leaderboard-container h2 {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 15px;
   color: #333;
   font-size: 2rem;
+}
+
+/* Last updated styling */
+.last-updated-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  padding: 8px 15px;
+  background-color: #f8f9fa;
+  border-radius: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  font-size: 0.9rem;
+  color: #6c757d;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.last-updated-icon {
+  margin-right: 8px;
+  font-size: 1.1rem;
+}
+
+.last-updated-text {
+  font-style: italic;
+}
+
+.last-updated-date {
+  font-weight: 600;
+  color: #495057;
+  font-style: normal;
 }
 
 .leaderboard {
