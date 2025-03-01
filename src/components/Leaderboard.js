@@ -53,7 +53,8 @@ const Leaderboard = () => {
       
       // Format options
       const options = { 
-        weekday: 'long', 
+        weekday: 'long',
+        year: 'numeric',
         month: 'short', 
         day: 'numeric',
         hour: '2-digit', 
@@ -82,7 +83,7 @@ const Leaderboard = () => {
     if (index === 2) return "🥉";
     return index + 1;
   };
-
+  // TODO: Fix alignment for first 3 rows
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>

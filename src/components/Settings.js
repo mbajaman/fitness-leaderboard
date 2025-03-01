@@ -137,7 +137,7 @@ const Settings = ({ isOpen, onClose }) => {
   };
 
   if (!isOpen) return null;
-
+  // TODO: Remove the modal that has just one silly button that you click anyways
   return (
     <div className="settings-modal-overlay">
       <div className="settings-modal">
