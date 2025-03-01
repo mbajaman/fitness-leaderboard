@@ -96,8 +96,7 @@ const Leaderboard = () => {
       )}
       
       {/* Uncomment this when you're ready to fetch from Supabase */}
-      {/* <button className="refresh-button" onClick={fetchLeaderboardData} disabled={loading}> */}
-      <button className="refresh-button" disabled={loading}>
+      <button className="refresh-button" onClick={fetchLeaderboardData} disabled={loading}>
         {loading ? 'Refreshing...' : 'Refresh Leaderboard'}
       </button>
     </div>

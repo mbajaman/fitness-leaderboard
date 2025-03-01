@@ -20,6 +20,9 @@ importers:
       '@testing-library/user-event':
         specifier: ^13.5.0
         version: 13.5.0(@testing-library/dom@8.20.1)
+      bcryptjs:
+        specifier: ^3.0.2
+        version: 3.0.2
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -1758,6 +1761,10 @@ packages:
 
   batch@0.6.1:
     resolution: {integrity: sha512-x+VAiMRL6UPkx+kudNvxTl6hB2XNNCG2r+7wixVfIYwu/2HKRXimwQyaumLjMveWvT2Hkd/cAJw+QBMfJ/EKVw==}
+
+  bcryptjs@3.0.2:
+    resolution: {integrity: sha512-k38b3XOZKv60C4E2hVsXTolJWfkGRMbILBIe2IBITXciy5bOsTKot5kDrf3ZfufQtQOUN5mXceUEpU1rTl9Uog==}
+    hasBin: true
 
   bfj@7.1.0:
     resolution: {integrity: sha512-I6MMLkn+anzNdCUp9hMRyui1HaNEUCco50lxbvNS4+EyXg8lN3nJ48PjPWtbH8UVS9CuMoaKE9U2V3l29DaRQw==}
@@ -7823,6 +7830,8 @@ snapshots:
   balanced-match@1.0.2: {}
 
   batch@0.6.1: {}
+
+  bcryptjs@3.0.2: {}
 
   bfj@7.1.0:
     dependencies:
