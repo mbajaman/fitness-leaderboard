@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../db/supabaseClient';
 import bcrypt from 'bcryptjs';
 import './Settings.css';
@@ -9,10 +9,15 @@ const Settings = ({ isOpen, onClose }) => {
   const [loading, setLoading] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [showUpdateForm, setShowUpdateForm] = useState(false);
+  const [nameList, setNameList] = useState([]);
   const [updateName, setUpdateName] = useState('');
   const [updateScore, setUpdateScore] = useState('');
   const [updateMessage, setUpdateMessage] = useState(null);
   const [updateLoading, setUpdateLoading] = useState(false);
+
+  useEffect(() => {
+    fetchNameList();
+  }, []);
 
   const handleAuthenticate = async (e) => {
     e.preventDefault();
@@ -63,6 +68,20 @@ const Settings = ({ isOpen, onClose }) => {
     }
   };
 
+  const fetchNameList = async () => {
+    const { data, error } = await supabase
+      .from('leaderboard')
+      .select('name')
+      .order('name', { ascending: true });
+      
+    if (error) {
+      console.error('Error fetching name list:', error);
+      setError('Failed to fetch name list. Please try again later.');
+    } else {
+      setNameList(data.map(item => item.name));
+    }
+  };
+
   const handleUpdateScoreClick = () => {
     setShowUpdateForm(true);
     setUpdateMessage(null);
@@ -107,7 +126,6 @@ const Settings = ({ isOpen, onClose }) => {
 
     //   const date = Date.now()
     //   const dateString = new Date(date).toISOString()
-
     //   console.log(dateString)
       
       // Update the user's score
@@ -173,29 +191,27 @@ const Settings = ({ isOpen, onClose }) => {
             <h3>Admin Panel</h3>
             <p>You are now authenticated as an admin.</p>
             
-            {!showUpdateForm ? (
-              <div className="admin-actions">
-                <button 
-                  className="admin-button"
-                  onClick={handleUpdateScoreClick}
-                >
-                  Update Scores
-                </button>
-              </div>
-            ) : (
+            
               <div className="update-score-form">
                 <h4>Update User Score</h4>
                 <form onSubmit={handleUpdateScore}>
                   <div className="form-group">
-                    <label htmlFor="update-name">User Name</label>
-                    <input
-                      type="text"
+                    
+                    <label htmlFor="update-name">
+                      User Name
+                      <span className="tooltip-icon" title="Contact Mohammed to add a new user">i</span>
+                    </label>
+                    <select
                       id="update-name"
                       value={updateName}
                       onChange={(e) => setUpdateName(e.target.value)}
-                      placeholder="Enter user name"
-                      disabled={updateLoading}
-                    />
+                      placeholder="Select a user"
+                    >
+                      <option value="" disabled>Select a user</option>
+                      {nameList.map(name => (
+                        <option key={name} value={name}>{name}</option>
+                      ))}
+                    </select>
                   </div>
                   <div className="form-group">
                     <label htmlFor="update-score">New Score</label>
@@ -234,7 +250,7 @@ const Settings = ({ isOpen, onClose }) => {
                   </div>
                 </form>
               </div>
-            )}
+            
           </div>
         )}
       </div>

@@ -80,12 +80,52 @@
   color: #495057;
 }
 
-.form-group input {
+.tooltip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 5px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background-color: #6c757d;
+  color: white;
+  font-size: 0.7rem;
+  font-weight: bold;
+  cursor: help;
+  position: relative;
+}
+
+.tooltip-icon:hover::after {
+  content: attr(title);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #343a40;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  z-index: 10;
+  margin-bottom: 5px;
+  margin-left: 75px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.form-group input, .form-group select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 1rem;
+  background-color: white;
+}
+
+.form-group select {
+  appearance: auto;
+  cursor: pointer;
 }
 
 .error-message {

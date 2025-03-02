@@ -3,7 +3,7 @@ import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
 
 const Leaderboard = () => {
-  const [leaderboardData, setLeaderboardData] = useState([]); // Use sample data initially
+  const [leaderboardData, setLeaderboardData] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
   const [loading, setLoading] = useState(false); // Set to false since we're using sample data
   const [error, setError] = useState(null);
