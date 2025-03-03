@@ -7,7 +7,7 @@ const Leaderboard = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
- 
+
   useEffect(() => {
     fetchLeaderboardData();
     updateLastUpdated();
@@ -16,13 +16,13 @@ const Leaderboard = () => {
   const fetchLeaderboardData = async () => {
     try {
       setLoading(true);
-      
+
       // Query the leaderboard data from Supabase
       const { data, error } = await supabase
         .from('leaderboard')
         .select('id, name, scores')
         .order('scores', { ascending: false });
-      
+
       if (error) {
         throw error;
       }
@@ -45,27 +45,27 @@ const Leaderboard = () => {
 
     setLastUpdated(lastUpdated);
   };
-  
+
   // Format date and time in a nice, readable format
-  const formatDateTime = (dateTimeStr) => {
+  const formatDateTime = dateTimeStr => {
     if (!dateTimeStr) return 'N/A';
-    
+
     try {
       const date = new Date(dateTimeStr);
-      
+
       // Check if date is valid
       if (isNaN(date.getTime())) return 'Invalid date';
-      
+
       // Format options
-      const options = { 
+      const options = {
         weekday: 'long',
         year: 'numeric',
-        month: 'short', 
+        month: 'short',
         day: 'numeric',
-        hour: '2-digit', 
-        minute: '2-digit'
+        hour: '2-digit',
+        minute: '2-digit',
       };
-      
+
       return date.toLocaleString('en-US', options);
     } catch (error) {
       console.error('Error formatting date:', error);
@@ -74,18 +74,18 @@ const Leaderboard = () => {
   };
 
   // Function to get medal class based on rank
-  const getMedalClass = (index) => {
-    if (index === 0) return "gold-medal";
-    if (index === 1) return "silver-medal";
-    if (index === 2) return "bronze-medal";
-    return "";
+  const getMedalClass = index => {
+    if (index === 0) return 'gold-medal';
+    if (index === 1) return 'silver-medal';
+    if (index === 2) return 'bronze-medal';
+    return '';
   };
 
   // Function to get medal emoji based on rank
-  const getMedalEmoji = (index) => {
-    if (index === 0) return "🥇";
-    if (index === 1) return "🥈";
-    if (index === 2) return "🥉";
+  const getMedalEmoji = index => {
+    if (index === 0) return '🥇';
+    if (index === 1) return '🥈';
+    if (index === 2) return '🥉';
     return index + 1;
   };
 
@@ -96,7 +96,10 @@ const Leaderboard = () => {
         <div className="last-updated-container">
           <span className="last-updated-icon">🕒</span>
           <span className="last-updated-text">
-            Last updated: <span className="last-updated-date">{formatDateTime(lastUpdated.data[0].updated_at)}</span>
+            Last updated:{' '}
+            <span className="last-updated-date">
+              {formatDateTime(lastUpdated.data[0].updated_at)}
+            </span>
           </span>
         </div>
       )}
@@ -114,13 +117,13 @@ const Leaderboard = () => {
             <div className="name">Name</div>
             <div className="score">Score</div>
           </div>
-          
+
           {leaderboardData.map((entry, index) => (
             <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">
                 {entry.name}
-                <Stars count={entry.scores} name={entry.name}/>
+                <Stars count={entry.scores} name={entry.name} />
               </div>
 
               <div className="score">{entry.scores}</div>
@@ -128,15 +131,19 @@ const Leaderboard = () => {
           ))}
         </div>
       )}
-      
-      <button className="refresh-button" onClick={() => {
-        fetchLeaderboardData();
-        updateLastUpdated();
-      }} disabled={loading}>
+
+      <button
+        className="refresh-button"
+        onClick={() => {
+          fetchLeaderboardData();
+          updateLastUpdated();
+        }}
+        disabled={loading}
+      >
         {loading ? 'Refreshing...' : 'Refresh Leaderboard'}
       </button>
     </div>
   );
 };
 
-export default Leaderboard; 
+export default Leaderboard;

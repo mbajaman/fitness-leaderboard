@@ -114,7 +114,8 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.form-group input, .form-group select {
+.form-group input,
+.form-group select {
   width: 100%;
   padding: 10px;
   border: 1px solid #ced4da;
@@ -261,4 +262,4 @@
 .cancel-button:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
-} 
+}

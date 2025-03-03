@@ -69,15 +69,15 @@ footer p {
     grid-template-columns: auto 1fr auto;
     align-items: center;
   }
-  
+
   .App-header h1 img:first-child {
     justify-self: start;
   }
-  
+
   .App-header h1 img:last-child {
     justify-self: end;
   }
-  
+
   .logo {
     width: 40px;
     height: 40px;
@@ -93,13 +93,13 @@ footer p {
     grid-template-columns: auto 1fr auto;
     align-items: center;
   }
-  
+
   .logo {
     width: 30px;
     height: 30px;
   }
-  
+
   .App-header p {
     font-size: 1rem;
   }
-} 
+}

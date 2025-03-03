@@ -92,17 +92,17 @@
 }
 
 .gold-medal .rank {
-  color: #FFD700;
+  color: #ffd700;
   font-size: 1.5rem;
 }
 
 .silver-medal .rank {
-  color: #C0C0C0;
+  color: #c0c0c0;
   font-size: 1.5rem;
 }
 
 .bronze-medal .rank {
-  color: #CD7F32;
+  color: #cd7f32;
   font-size: 1.5rem;
 }
 
@@ -126,7 +126,8 @@
   font-weight: 500;
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 20px;
   color: #6c757d;
@@ -198,4 +199,4 @@
     padding: 8px 16px;
     font-size: 0.9rem;
   }
-} 
+}

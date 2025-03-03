@@ -21,7 +21,7 @@ function App() {
       <header className="App-header">
         <h1>
           <img className="logo" src={dumbbell} alt="March Madness Fitness Challenge Logo" />
-          March Madness Fitness Challenge 
+          March Madness Fitness Challenge
           <img className="logo" src={dumbbell} alt="March Madness Fitness Challenge Logo" />
         </h1>
         <p>Track your progress and compete with others!</p>
@@ -33,12 +33,15 @@ function App() {
         <Leaderboard />
       </main>
       <footer>
-        <p>&copy; {new Date().getFullYear()} March Madness Fitness Challenge Leaderboard. All rights reserved.</p>
+        <p>
+          &copy; {new Date().getFullYear()} March Madness Fitness Challenge Leaderboard. All rights
+          reserved.
+        </p>
       </footer>
-      
+
       <Settings isOpen={isSettingsOpen} onClose={closeSettings} />
     </div>
   );
 }
 
-export default App; 
+export default App;
