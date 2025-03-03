@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/fitness-leaderboard/static/css/main.1052e86e.css",
-    "main.js": "/fitness-leaderboard/static/js/main.81d1c276.js",
+    "main.css": "/fitness-leaderboard/static/css/main.91f3974e.css",
+    "main.js": "/fitness-leaderboard/static/js/main.b61621aa.js",
     "static/js/467.342e8cac.chunk.js": "/fitness-leaderboard/static/js/467.342e8cac.chunk.js",
     "static/js/973.f3539b31.chunk.js": "/fitness-leaderboard/static/js/973.f3539b31.chunk.js",
     "static/media/settings.png": "/fitness-leaderboard/static/media/settings.ee64cccfa3e9bbde799f.png",
@@ -11,13 +11,13 @@
     "static/media/red-star.svg": "/fitness-leaderboard/static/media/red-star.89f7c20ea607d144b72efd6e4db15eb1.svg",
     "static/media/yellow-star.svg": "/fitness-leaderboard/static/media/yellow-star.07df7e25907e6f64eda094f4a380de15.svg",
     "index.html": "/fitness-leaderboard/index.html",
-    "main.1052e86e.css.map": "/fitness-leaderboard/static/css/main.1052e86e.css.map",
-    "main.81d1c276.js.map": "/fitness-leaderboard/static/js/main.81d1c276.js.map",
+    "main.91f3974e.css.map": "/fitness-leaderboard/static/css/main.91f3974e.css.map",
+    "main.b61621aa.js.map": "/fitness-leaderboard/static/js/main.b61621aa.js.map",
     "467.342e8cac.chunk.js.map": "/fitness-leaderboard/static/js/467.342e8cac.chunk.js.map",
     "973.f3539b31.chunk.js.map": "/fitness-leaderboard/static/js/973.f3539b31.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1052e86e.css",
-    "static/js/main.81d1c276.js"
+    "static/css/main.91f3974e.css",
+    "static/js/main.b61621aa.js"
   ]
 }
