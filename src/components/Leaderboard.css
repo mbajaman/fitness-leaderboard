@@ -62,7 +62,7 @@
 
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 80px 120px 1fr 120px;
+  grid-template-columns: 80px 8rem 1fr 120px;
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
   border-right: 1px solid #e9ecef;
@@ -116,16 +116,11 @@
 }
 
 .name {
-  align-content: center;
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 8px;
-}
-
-.stars {
-  align-content: center;
-  font-weight: 500;
+  margin-left: 24px;
 }
 
 .score {
@@ -186,7 +181,7 @@
   }
 
   .leaderboard-row {
-    grid-template-columns: 50px 1fr 1fr;
+    grid-template-columns: 50px 1fr 80px;
     padding: 10px;
     font-size: 0.9rem;
   }
@@ -197,7 +192,8 @@
 
   .name {
     gap: 4px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .gold-medal .rank,

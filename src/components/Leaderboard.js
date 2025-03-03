@@ -126,7 +126,7 @@ const Leaderboard = () => {
                 {window.innerWidth < 768 && <Stars count={entry.scores} name={entry.name} />}
               </div>
               {window.innerWidth > 768 && (
-                <div className="stars">
+                <div>
                   <Stars count={entry.scores} name={entry.name} />
                 </div>
               )}
