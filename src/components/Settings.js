@@ -89,6 +89,7 @@ const Settings = ({ isOpen, onClose }) => {
     setUpdateScore('');
   };
 
+  // TODO: Enable RLS and ensure triggers run when inserting using anon key
   const handleUpdateScore = async (e) => {
     e.preventDefault();
     
@@ -155,7 +156,6 @@ const Settings = ({ isOpen, onClose }) => {
   };
 
   if (!isOpen) return null;
-  // TODO: Remove the modal that has just one silly button that you click anyways
   return (
     <div className="settings-modal-overlay">
       <div className="settings-modal">
@@ -190,8 +190,6 @@ const Settings = ({ isOpen, onClose }) => {
           <div className="settings-content">
             <h3>Admin Panel</h3>
             <p>You are now authenticated as an admin.</p>
-            
-            
               <div className="update-score-form">
                 <h4>Update User Score</h4>
                 <form onSubmit={handleUpdateScore}>
@@ -237,12 +235,12 @@ const Settings = ({ isOpen, onClose }) => {
                       className="update-button"
                       disabled={updateLoading}
                     >
-                      {updateLoading ? 'Updating...' : 'Update'}
+                      { updateLoading ? 'Updating...' : 'Update'}
                     </button>
                     <button 
                       type="button" 
                       className="cancel-button"
-                      onClick={handleCancelUpdate}
+                      onClick={onClose}
                       disabled={updateLoading}
                     >
                       Cancel
@@ -250,7 +248,6 @@ const Settings = ({ isOpen, onClose }) => {
                   </div>
                 </form>
               </div>
-            
           </div>
         )}
       </div>

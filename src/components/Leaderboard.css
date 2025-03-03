@@ -63,6 +63,7 @@
   display: grid;
   grid-template-columns: 80px 1fr 120px;
   padding: 15px;
+  border-left: 4px solid transparent;
   border-bottom: 1px solid #e9ecef;
   transition: background-color 0.2s;
 }
@@ -106,16 +107,19 @@
 }
 
 .rank {
+  padding-right: 20px;
   text-align: center;
   font-weight: bold;
 }
 
 .name {
+  align-content: center;
   font-weight: 500;
 }
 
 .score {
   text-align: right;
+  align-content: center;
   font-weight: 500;
 }
 
