@@ -123,9 +123,15 @@ const Leaderboard = () => {
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">
                 {entry.name}
-                <Stars count={entry.scores} name={entry.name} />
+                { window.innerWidth < 768 && (
+                  <Stars count={entry.scores} name={entry.name} />
+                )}
               </div>
-
+              { window.innerWidth > 768 && (
+                <div className="stars">
+                  <Stars count={entry.scores} name={entry.name} />
+                </div>
+              )}
               <div className="score">{entry.scores}</div>
             </div>
           ))}

@@ -7,7 +7,6 @@
 .leaderboard-container h2 {
   text-align: center;
   margin-bottom: 15px;
-  color: #333;
   font-size: 2rem;
 }
 
@@ -18,11 +17,11 @@
   justify-content: center;
   margin-bottom: 20px;
   padding: 8px 15px;
-  background-color: #f8f9fa;
+  background-color: #323137;
   border-radius: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #a8b7c5;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -39,37 +38,41 @@
 
 .last-updated-date {
   font-weight: 600;
-  color: #495057;
+  color: #a8b7c5;
   font-style: normal;
 }
 
 .leaderboard {
-  background-color: #fff;
+  background-color: transparent;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  /* TODO: This border goes outside the top 3 color on the left side, it misaligns the row by 1px */
+  border: 1px solid #e9ecef;
 }
 
 .leaderboard-header {
   display: grid;
   grid-template-columns: 80px 1fr 120px;
-  background-color: #f8f9fa;
+  background-color: transparent;
   font-weight: bold;
   padding: 15px;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 80px 1fr 120px;
+  grid-template-columns: 80px 120px 1fr 120px;
   padding: 15px;
-  border-left: 4px solid transparent;
   border-bottom: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
   transition: background-color 0.2s;
+  overflow: hidden;
 }
 
 .leaderboard-row:hover {
-  background-color: #f8f9fa;
+  background-color: #f8f9fa1c;
 }
 
 /* Enhanced medal styling */
@@ -118,6 +121,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
+}
+
+.stars {
+  align-content: center;
+  font-weight: 500;
 }
 
 .score {
@@ -173,9 +181,12 @@
     padding: 6px 12px;
   }
 
-  .leaderboard-header,
-  .leaderboard-row {
+  .leaderboard-header {
     grid-template-columns: 50px 1fr 80px;
+  }
+
+  .leaderboard-row {
+    grid-template-columns: 50px 1fr 1fr;
     padding: 10px;
     font-size: 0.9rem;
   }

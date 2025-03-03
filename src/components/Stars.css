@@ -2,11 +2,10 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  background-color: #f5f5f5;
+  background-color: #ffffff1a;
   border-radius: 8px;
   padding: 4px 8px;
   margin-left: 12px;
-  border: 1px solid #e0e0e0;
   vertical-align: middle;
 }
 
@@ -19,13 +18,13 @@
 .star-count {
   font-size: 14px;
   font-weight: 500;
-  color: #424242;
+  color: #fff;
   margin-left: 2px;
 }
 
 @media screen and (max-width: 600px) {
   .stars-container {
-    margin-left: 6px;
+    margin-left: -6px;
     padding: 2px 6px;
     gap: 2px;
   }

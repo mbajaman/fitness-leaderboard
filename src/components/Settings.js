@@ -86,7 +86,6 @@ const Settings = ({ isOpen, onClose }) => {
     setUpdateScore('');
   };
 
-  // TODO: Enable RLS and ensure triggers run when inserting using anon key
   const handleUpdateScore = async e => {
     e.preventDefault();
 
@@ -196,6 +195,7 @@ const Settings = ({ isOpen, onClose }) => {
                       i
                     </span>
                   </label>
+                  {/* TODO: Have a user suggestion list while typing */}
                   <select
                     id="update-name"
                     value={updateName}
