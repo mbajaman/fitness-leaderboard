@@ -83,7 +83,7 @@ const Leaderboard = () => {
     if (index === 2) return "🥉";
     return index + 1;
   };
-  // TODO: Fix alignment for first 3 rows
+
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
