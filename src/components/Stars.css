@@ -1,0 +1,41 @@
+.stars-container {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  padding: 4px 8px;
+  margin-left: 12px;
+  border: 1px solid #e0e0e0;
+  vertical-align: middle;
+}
+
+.star-icon {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.star-count {
+  font-size: 14px;
+  font-weight: 500;
+  color: #424242;
+  margin-left: 2px;
+}
+
+@media screen and (max-width: 600px) {
+  .stars-container {
+    margin-left: 6px;
+    padding: 2px 6px;
+    gap: 2px;
+  }
+
+  .star-icon {
+    width: 14px;
+    height: 14px;
+  }
+
+  .star-count {
+    font-size: 12px;
+  }
+}

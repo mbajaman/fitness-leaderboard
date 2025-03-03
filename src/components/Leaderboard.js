@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
-
+import Stars from './Stars';
 const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
-  const [loading, setLoading] = useState(false); // Set to false since we're using sample data
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
  
   useEffect(() => {
@@ -37,7 +37,12 @@ const Leaderboard = () => {
   };
 
   const updateLastUpdated = async () => {
-    const lastUpdated = await supabase.from('leaderboard').select('updated_at').order('updated_at', { ascending: false }).limit(1);
+    const lastUpdated = await supabase
+      .from('leaderboard')
+      .select('updated_at')
+      .order('updated_at', { ascending: false })
+      .limit(1);
+
     setLastUpdated(lastUpdated);
   };
   
@@ -113,14 +118,17 @@ const Leaderboard = () => {
           {leaderboardData.map((entry, index) => (
             <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
               <div className="rank">{getMedalEmoji(index)}</div>
-              <div className="name">{entry.name}</div>
+              <div className="name">
+                {entry.name}
+                <Stars count={entry.scores} name={entry.name}/>
+              </div>
+
               <div className="score">{entry.scores}</div>
             </div>
           ))}
         </div>
       )}
       
-      {/* Uncomment this when you're ready to fetch from Supabase */}
       <button className="refresh-button" onClick={() => {
         fetchLeaderboardData();
         updateLastUpdated();

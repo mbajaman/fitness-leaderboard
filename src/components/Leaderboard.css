@@ -115,10 +115,13 @@
 .name {
   align-content: center;
   font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .score {
-  text-align: right;
+  text-align: center;
   align-content: center;
   font-weight: 500;
 }
@@ -153,4 +156,46 @@
 .refresh-button:disabled {
   background-color: #6c757d;
   cursor: not-allowed;
+}
+
+@media screen and (max-width: 600px) {
+  .leaderboard-container {
+    padding: 10px;
+  }
+
+  .leaderboard-container h2 {
+    font-size: 1.5rem;
+  }
+
+  .last-updated-container {
+    font-size: 0.8rem;
+    padding: 6px 12px;
+  }
+
+  .leaderboard-header,
+  .leaderboard-row {
+    grid-template-columns: 50px 1fr 80px;
+    padding: 10px;
+    font-size: 0.9rem;
+  }
+
+  .rank {
+    padding-right: 10px;
+  }
+
+  .name {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .gold-medal .rank,
+  .silver-medal .rank,
+  .bronze-medal .rank {
+    font-size: 1.2rem;
+  }
+
+  .refresh-button {
+    padding: 8px 16px;
+    font-size: 0.9rem;
+  }
 } 
