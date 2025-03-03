@@ -1,19 +1,23 @@
 {
   "files": {
-    "main.css": "/fitness-leaderboard/static/css/main.81e5eda0.css",
-    "main.js": "/fitness-leaderboard/static/js/main.a7dc5867.js",
+    "main.css": "/fitness-leaderboard/static/css/main.1052e86e.css",
+    "main.js": "/fitness-leaderboard/static/js/main.81d1c276.js",
     "static/js/467.342e8cac.chunk.js": "/fitness-leaderboard/static/js/467.342e8cac.chunk.js",
     "static/js/973.f3539b31.chunk.js": "/fitness-leaderboard/static/js/973.f3539b31.chunk.js",
     "static/media/settings.png": "/fitness-leaderboard/static/media/settings.ee64cccfa3e9bbde799f.png",
     "static/media/dumbbell.png": "/fitness-leaderboard/static/media/dumbbell.3a934782572f70454398.png",
+    "static/media/blue-star.svg": "/fitness-leaderboard/static/media/blue-star.224fb668b0ab0946088685e913f65208.svg",
+    "static/media/gree-star.svg": "/fitness-leaderboard/static/media/gree-star.989f6c5a2958b59e71e22e0243b8b520.svg",
+    "static/media/red-star.svg": "/fitness-leaderboard/static/media/red-star.89f7c20ea607d144b72efd6e4db15eb1.svg",
+    "static/media/yellow-star.svg": "/fitness-leaderboard/static/media/yellow-star.07df7e25907e6f64eda094f4a380de15.svg",
     "index.html": "/fitness-leaderboard/index.html",
-    "main.81e5eda0.css.map": "/fitness-leaderboard/static/css/main.81e5eda0.css.map",
-    "main.a7dc5867.js.map": "/fitness-leaderboard/static/js/main.a7dc5867.js.map",
+    "main.1052e86e.css.map": "/fitness-leaderboard/static/css/main.1052e86e.css.map",
+    "main.81d1c276.js.map": "/fitness-leaderboard/static/js/main.81d1c276.js.map",
     "467.342e8cac.chunk.js.map": "/fitness-leaderboard/static/js/467.342e8cac.chunk.js.map",
     "973.f3539b31.chunk.js.map": "/fitness-leaderboard/static/js/973.f3539b31.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.81e5eda0.css",
-    "static/js/main.a7dc5867.js"
+    "static/css/main.1052e86e.css",
+    "static/js/main.81d1c276.js"
   ]
 }
