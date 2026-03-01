@@ -2,13 +2,42 @@
 -- Run this in the Supabase SQL Editor to create tables, function, and trigger.
 -- After running, you can drop the old `leaderboard` and `account` tables if they exist.
 
--- Users (username-only auth; is_tag_team = true when registered as Tag-Team)
+-- Users (username-only auth; is_tag_team = true when registered as Tag-Team; has_slack_linked from slack_user_links)
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username TEXT UNIQUE NOT NULL,
   is_tag_team BOOLEAN NOT NULL DEFAULT false,
+  has_slack_linked BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Multiple Slack accounts can link to the same leaderboard user (e.g. tag teams)
+CREATE TABLE IF NOT EXISTS slack_user_links (
+  slack_user_id TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
+);
+CREATE INDEX IF NOT EXISTS idx_slack_user_links_user_id ON slack_user_links(user_id);
+
+-- One-time codes for Connect Slack flow (web creates code, user runs /fitness-link <code> in Slack)
+CREATE TABLE IF NOT EXISTS slack_link_codes (
+  code TEXT PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  expires_at TIMESTAMPTZ NOT NULL DEFAULT (NOW() + INTERVAL '15 minutes')
+);
+
+-- Keep users.has_slack_linked in sync when slack_user_links changes (e.g. tag teams: multiple Slack IDs per user)
+CREATE OR REPLACE FUNCTION sync_has_slack_linked()
+RETURNS TRIGGER LANGUAGE plpgsql SECURITY DEFINER AS $$
+DECLARE uid UUID;
+BEGIN
+  uid := CASE WHEN TG_OP = 'DELETE' THEN OLD.user_id ELSE NEW.user_id END;
+  UPDATE users SET has_slack_linked = (SELECT count(*) > 0 FROM slack_user_links WHERE user_id = uid) WHERE id = uid;
+  RETURN COALESCE(NEW, OLD);
+END;
+$$;
+DROP TRIGGER IF EXISTS trigger_sync_has_slack_linked ON slack_user_links;
+CREATE TRIGGER trigger_sync_has_slack_linked
+  AFTER INSERT OR DELETE ON slack_user_links FOR EACH ROW EXECUTE FUNCTION sync_has_slack_linked();
 
 -- Star types (yellow, blue, red; point values and optional day-of-week availability)
 -- available_on_dow: array of 0-6 (Sunday=0, Saturday=6); NULL or empty = available every day

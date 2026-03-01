@@ -57,7 +57,7 @@ const AddStarsModal = ({ isOpen, onClose }) => {
   }, []);
 
   const fetchEntries = useCallback(
-    async (starTypesList) => {
+    async starTypesList => {
       if (!user || !isOpen) return;
       setLoading(true);
       const { data, error } = await supabase
@@ -79,7 +79,7 @@ const AddStarsModal = ({ isOpen, onClose }) => {
           byStar[row.star_type_id] = Math.min(6, Math.max(0, isNaN(q) ? 0 : q));
         } else {
           const q = Number(row.quantity);
-          byStar[row.star_type_id] = (isNaN(q) ? row.checked : q > 0);
+          byStar[row.star_type_id] = isNaN(q) ? row.checked : q > 0;
         }
       });
       setEntries(byStar);
@@ -179,17 +179,54 @@ const AddStarsModal = ({ isOpen, onClose }) => {
             <p className="add-stars-loading">Loading...</p>
           ) : (
             <div className="add-stars-checkboxes">
-              {starTypes.filter(st => ['yellow', 'blue', 'red'].includes(st.name)).map(st => {
-                const available = isAvailable(st);
-                const isYellow = st.name === 'yellow';
-                const label = STAR_LABELS[st.name] || st.name;
+              {starTypes
+                .filter(st => ['yellow', 'blue', 'red'].includes(st.name))
+                .map(st => {
+                  const available = isAvailable(st);
+                  const isYellow = st.name === 'yellow';
+                  const label = STAR_LABELS[st.name] || st.name;
 
-                if (isYellow) {
-                  const count = Math.min(6, Math.max(0, Number(entries[st.id]) || 0));
+                  if (isYellow) {
+                    const count = Math.min(6, Math.max(0, Number(entries[st.id]) || 0));
+                    return (
+                      <div
+                        key={st.id}
+                        className={`add-stars-row add-stars-row-yellow ${!available ? 'add-stars-row-disabled' : ''}`}
+                      >
+                        <img
+                          src={STAR_ICONS[st.name] || yellowStarIcon}
+                          alt=""
+                          className="add-stars-row-icon"
+                        />
+                        <span className="add-stars-row-name">{label}</span>
+                        <div
+                          className="add-stars-yellow-group"
+                          aria-label={`${label}, up to 6 stars`}
+                        >
+                          {[1, 2, 3, 4, 5, 6].map(n => (
+                            <label key={n} className="add-stars-yellow-check">
+                              <input
+                                type="checkbox"
+                                checked={count >= n}
+                                disabled={!available || saving}
+                                onChange={() => {
+                                  const newCount = count >= n ? (count > n ? n : n - 1) : n;
+                                  handleYellowQuantity(st.id, newCount);
+                                }}
+                              />
+                              <span className="add-stars-yellow-num">{n}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  const checked = !!entries[st.id];
                   return (
-                    <div
+                    <label
                       key={st.id}
-                      className={`add-stars-row add-stars-row-yellow ${!available ? 'add-stars-row-disabled' : ''}`}
+                      className={`add-stars-row ${!available ? 'add-stars-row-disabled' : ''}`}
                     >
                       <img
                         src={STAR_ICONS[st.name] || yellowStarIcon}
@@ -197,50 +234,18 @@ const AddStarsModal = ({ isOpen, onClose }) => {
                         className="add-stars-row-icon"
                       />
                       <span className="add-stars-row-name">{label}</span>
-                      <div className="add-stars-yellow-group" aria-label={`${label}, up to 6 stars`}>
-                        {[1, 2, 3, 4, 5, 6].map(n => (
-                          <label key={n} className="add-stars-yellow-check">
-                            <input
-                              type="checkbox"
-                              checked={count >= n}
-                              disabled={!available || saving}
-                              onChange={() => {
-                                const newCount = count >= n ? (count > n ? n : n - 1) : n;
-                                handleYellowQuantity(st.id, newCount);
-                              }}
-                            />
-                            <span className="add-stars-yellow-num">{n}</span>
-                          </label>
-                        ))}
-                      </div>
-                    </div>
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        disabled={!available || saving}
+                        onChange={e => handleToggle(st.id, e.target.checked)}
+                      />
+                      {!available && (
+                        <span className="add-stars-unavailable">Not available this day</span>
+                      )}
+                    </label>
                   );
-                }
-
-                const checked = !!entries[st.id];
-                return (
-                  <label
-                    key={st.id}
-                    className={`add-stars-row ${!available ? 'add-stars-row-disabled' : ''}`}
-                  >
-                    <img
-                      src={STAR_ICONS[st.name] || yellowStarIcon}
-                      alt=""
-                      className="add-stars-row-icon"
-                    />
-                    <span className="add-stars-row-name">{label}</span>
-                    <input
-                      type="checkbox"
-                      checked={checked}
-                      disabled={!available || saving}
-                      onChange={e => handleToggle(st.id, e.target.checked)}
-                    />
-                    {!available && (
-                      <span className="add-stars-unavailable">Not available this day</span>
-                    )}
-                  </label>
-                );
-              })}
+                })}
             </div>
           )}
           {starTypes.length === 0 && !loading && (

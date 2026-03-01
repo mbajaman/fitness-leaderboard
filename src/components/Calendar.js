@@ -34,7 +34,7 @@ const Calendar = ({ value, onChange, minDate, maxDate }) => {
     return matchers.length ? matchers : undefined;
   }, [minDate, maxDate]);
 
-  const handleSelect = (date) => {
+  const handleSelect = date => {
     onChange(date ? toDateStr(date) : '');
   };
 

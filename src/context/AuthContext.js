@@ -24,6 +24,26 @@ export function AuthProvider({ children }) {
     setRestored(true);
   }, []);
 
+  useEffect(() => {
+    if (!restored || !user?.id) return;
+    supabase
+      .from('users')
+      .select('id, username, is_tag_team, has_slack_linked')
+      .eq('id', user.id)
+      .single()
+      .then(({ data }) => {
+        if (data && data.has_slack_linked !== user.has_slack_linked) {
+          setSession({
+            id: data.id,
+            username: data.username,
+            is_tag_team: data.is_tag_team,
+            has_slack_linked: data.has_slack_linked,
+          });
+        }
+      })
+      .catch(() => {});
+  }, [restored, user?.id]);
+
   const setSession = userData => {
     setUser(userData);
     if (userData) {
@@ -40,22 +60,49 @@ export function AuthProvider({ children }) {
         username: username.trim(),
         is_tag_team: !!isTagTeam,
       })
-      .select('id, username, is_tag_team')
+      .select('id, username, is_tag_team, has_slack_linked')
       .single();
     if (error) throw error;
-    setSession({ id: data.id, username: data.username, is_tag_team: data.is_tag_team });
+    setSession({
+      id: data.id,
+      username: data.username,
+      is_tag_team: data.is_tag_team,
+      has_slack_linked: data.has_slack_linked,
+    });
     return data;
   };
 
   const login = async username => {
     const { data, error } = await supabase
       .from('users')
-      .select('id, username, is_tag_team')
+      .select('id, username, is_tag_team, has_slack_linked')
       .eq('username', username.trim())
       .single();
     if (error || !data) return null;
-    setSession({ id: data.id, username: data.username, is_tag_team: data.is_tag_team });
+    setSession({
+      id: data.id,
+      username: data.username,
+      is_tag_team: data.is_tag_team,
+      has_slack_linked: data.has_slack_linked,
+    });
     return data;
+  };
+
+  const refreshUser = async () => {
+    if (!user?.id) return;
+    const { data, error } = await supabase
+      .from('users')
+      .select('id, username, is_tag_team, has_slack_linked')
+      .eq('id', user.id)
+      .single();
+    if (!error && data) {
+      setSession({
+        id: data.id,
+        username: data.username,
+        is_tag_team: data.is_tag_team,
+        has_slack_linked: data.has_slack_linked,
+      });
+    }
   };
 
   const logout = () => {
@@ -68,6 +115,7 @@ export function AuthProvider({ children }) {
     register,
     login,
     logout,
+    refreshUser,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

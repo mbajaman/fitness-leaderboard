@@ -4,6 +4,7 @@ import Leaderboard from './components/Leaderboard';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import AddStarsModal from './components/AddStarsModal';
+import ConnectSlack from './components/ConnectSlack';
 import './App.css';
 
 function AppHeader({ onOpenAddStars }) {
@@ -27,6 +28,7 @@ function AppHeader({ onOpenAddStars }) {
         {user ? (
           <>
             <span className="header-username">{user.username}</span>
+            <ConnectSlack />
             <button type="button" className="header-btn header-btn-add" onClick={onOpenAddStars}>
               + Add
             </button>

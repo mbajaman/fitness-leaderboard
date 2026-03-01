@@ -76,16 +76,16 @@ const RegisterModal = ({ isOpen, onClose, onSuccess, switchToLogin }) => {
         >
           <div className="form-group">
             <label htmlFor="register-username">
-              {tab === TAB_TAG_TEAM
-                ? 'Team name or both names'
-                : 'Username'}
+              {tab === TAB_TAG_TEAM ? 'Team name or both names' : 'Username'}
             </label>
             <input
               id="register-username"
               type="text"
               value={username}
               onChange={e => setUsername(e.target.value)}
-              placeholder={tab === TAB_TAG_TEAM ? 'e.g. BILL+TED or TEAM AL(L)AN' : 'Choose a username'}
+              placeholder={
+                tab === TAB_TAG_TEAM ? 'e.g. BILL+TED or TEAM AL(L)AN' : 'Choose a username'
+              }
               disabled={loading}
               autoComplete="username"
             />
