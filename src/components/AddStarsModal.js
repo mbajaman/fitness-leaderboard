@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import yellowStarIcon from '../assets/yellow-star.svg';
 import blueStarIcon from '../assets/blue-star.svg';
 import redStarIcon from '../assets/red-star.svg';
+import Calendar from './Calendar';
 import './AddStarsModal.css';
 
 const STAR_ICONS = {
@@ -28,9 +29,20 @@ function todayStr() {
   return d.toISOString().slice(0, 10);
 }
 
+const MARCH_START = () => `${new Date().getFullYear()}-03-01`;
+const MARCH_END = () => `${new Date().getFullYear()}-03-31`;
+
+function clampToMarch(dateStr) {
+  const start = MARCH_START();
+  const end = MARCH_END();
+  if (dateStr < start) return start;
+  if (dateStr > end) return end;
+  return dateStr;
+}
+
 const AddStarsModal = ({ isOpen, onClose }) => {
   const { user } = useAuth();
-  const [selectedDate, setSelectedDate] = useState(todayStr());
+  const [selectedDate, setSelectedDate] = useState(() => clampToMarch(todayStr()));
   const [starTypes, setStarTypes] = useState([]);
   const [entries, setEntries] = useState({});
   const [loading, setLoading] = useState(false);
@@ -82,6 +94,10 @@ const AddStarsModal = ({ isOpen, onClose }) => {
   useEffect(() => {
     if (isOpen && user && starTypes.length > 0) fetchEntries(starTypes);
   }, [isOpen, user, selectedDate, starTypes, fetchEntries]);
+
+  useEffect(() => {
+    if (isOpen) setSelectedDate(prev => clampToMarch(prev));
+  }, [isOpen]);
 
   const dayOfWeek = dateStr => {
     const d = new Date(dateStr + 'T12:00:00');
@@ -151,13 +167,12 @@ const AddStarsModal = ({ isOpen, onClose }) => {
           </button>
         </div>
         <div className="add-stars-body">
-          <div className="add-stars-date">
-            <label htmlFor="add-stars-date-picker">Date</label>
-            <input
-              id="add-stars-date-picker"
-              type="date"
+          <div className="add-stars-calendar-wrap">
+            <Calendar
               value={selectedDate}
-              onChange={e => setSelectedDate(e.target.value)}
+              onChange={setSelectedDate}
+              minDate={MARCH_START()}
+              maxDate={MARCH_END()}
             />
           </div>
           {loading ? (
