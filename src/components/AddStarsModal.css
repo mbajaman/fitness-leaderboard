@@ -14,12 +14,12 @@
 .add-stars-modal {
   font-family: var(--font-sans);
   background-color: #fff;
-  border-radius: 8px;
+  border-radius: 12px;
   width: 90%;
-  max-width: 500px;
+  max-width: 420px;
   max-height: 90vh;
   overflow: auto;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
 }
 
 .add-stars-header {
@@ -77,27 +77,19 @@
   color: #495057;
 }
 
-.add-stars-date {
-  margin-bottom: 20px;
+.add-stars-calendar-wrap {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
 }
 
-.add-stars-date label {
-  display: block;
-  margin-bottom: 6px;
-  font-weight: var(--font-weight-semibold);
-  color: #343a40;
-}
-
-.add-stars-date input[type='date'] {
+.add-stars-calendar-wrap .calendar {
   width: 100%;
-  max-width: 200px;
-  padding: 8px 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  font-size: 1rem;
-  font-weight: var(--font-weight-normal);
-  background: #fff;
-  box-sizing: border-box;
+}
+
+.add-stars-calendar-wrap .calendar-day {
+  max-width: none;
+  min-height: 40px;
 }
 
 .add-stars-loading,
