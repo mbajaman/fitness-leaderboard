@@ -53,7 +53,8 @@ const Leaderboard = () => {
         const uid = row.user_id;
         const name = row.star_types?.name;
         if (!acc[uid]) acc[uid] = { yellow: 0, blue: 0, red: 0 };
-        if (starOrder.includes(name)) acc[uid][name] = (acc[uid][name] || 0) + Number(row.quantity || 0);
+        if (starOrder.includes(name))
+          acc[uid][name] = (acc[uid][name] || 0) + Number(row.quantity || 0);
         return acc;
       }, {});
 
@@ -65,9 +66,7 @@ const Leaderboard = () => {
           name: userMap[uid] || 'Unknown',
           total_score: Number(row.total_score),
           updated_at: row.updated_at,
-          starCounts: counts
-            ? [counts.yellow || 0, counts.blue || 0, counts.red || 0]
-            : [0, 0, 0],
+          starCounts: counts ? [counts.yellow || 0, counts.blue || 0, counts.red || 0] : [0, 0, 0],
         };
       });
       setLeaderboardData(merged);
