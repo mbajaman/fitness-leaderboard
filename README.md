@@ -37,7 +37,7 @@ REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 1. Create a new Supabase project.
 2. In the Supabase SQL Editor, run the schema script: **`supabase/schema.sql`**
    - This creates `users`, `star_types`, `daily_star_entries`, and `user_scores` tables, plus the score-calculation function and triggers.
-   - Star types (yellow, blue, red, green) are seeded with default point values; you can edit `star_types` and `available_on_dow` for day-specific stars.
+   - Star types (yellow, blue, red) are seeded with default point values; you can edit `star_types` and `available_on_dow` for day-specific stars.
 
 ### Running the Application
 

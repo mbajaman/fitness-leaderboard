@@ -9,23 +9,26 @@ CREATE TABLE IF NOT EXISTS users (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Star types (yellow, blue, red, green; point values and optional day-of-week availability)
+-- Star types (yellow, blue, red; point values and optional day-of-week availability)
 -- available_on_dow: array of 0-6 (Sunday=0, Saturday=6); NULL or empty = available every day
+-- max_per_day: cap on count per day (e.g. yellow=6, others=1)
 CREATE TABLE IF NOT EXISTS star_types (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name TEXT UNIQUE NOT NULL,
   display_order INT NOT NULL DEFAULT 0,
-  point_value NUMERIC NOT NULL DEFAULT 1,
+  point_value NUMERIC NOT NULL DEFAULT 5,
+  max_per_day INT NOT NULL DEFAULT 1,
   available_on_dow INT[] DEFAULT NULL
 );
 
--- One row per user per date per star type
+-- One row per user per date per star type; quantity = 0-6 for yellow, 0 or 1 for others
 CREATE TABLE IF NOT EXISTS daily_star_entries (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   date DATE NOT NULL,
   star_type_id UUID NOT NULL REFERENCES star_types(id) ON DELETE CASCADE,
   checked BOOLEAN NOT NULL DEFAULT false,
+  quantity INT NOT NULL DEFAULT 1,
   UNIQUE (user_id, date, star_type_id)
 );
 
@@ -40,7 +43,7 @@ CREATE TABLE IF NOT EXISTS user_scores (
 CREATE INDEX IF NOT EXISTS idx_daily_star_entries_user_date ON daily_star_entries(user_id, date);
 CREATE INDEX IF NOT EXISTS idx_user_scores_total ON user_scores(total_score DESC);
 
--- Function: compute total score for a user (only counts entries where star was available that day)
+-- Function: compute total score (5 pts per star; yellow capped at 6/day, others at 1/day)
 CREATE OR REPLACE FUNCTION compute_user_score(p_user_id UUID)
 RETURNS NUMERIC
 LANGUAGE plpgsql
@@ -49,11 +52,13 @@ AS $$
 DECLARE
   total NUMERIC := 0;
 BEGIN
-  SELECT COALESCE(SUM(st.point_value), 0) INTO total
+  SELECT COALESCE(SUM(
+    LEAST(d.quantity, COALESCE(st.max_per_day, 1)) * st.point_value
+  ), 0) INTO total
   FROM daily_star_entries d
   JOIN star_types st ON st.id = d.star_type_id
   WHERE d.user_id = p_user_id
-    AND d.checked = true
+    AND d.quantity > 0
     AND (
       st.available_on_dow IS NULL
       OR array_length(st.available_on_dow, 1) IS NULL
@@ -108,14 +113,16 @@ CREATE TRIGGER trigger_create_user_score_on_signup
   FOR EACH ROW
   EXECUTE FUNCTION create_user_score_on_signup();
 
--- Seed star types (yellow, blue, red, green); adjust point_value and available_on_dow as needed
-INSERT INTO star_types (name, display_order, point_value, available_on_dow)
+-- Seed star types: 5 pts per star; yellow max 6/day, blue weekdays only
+INSERT INTO star_types (name, display_order, point_value, max_per_day, available_on_dow)
 VALUES
-  ('yellow', 1, 1, NULL),
-  ('blue', 2, 1, NULL),
-  ('red', 3, 1, NULL),
-  ('green', 4, 1, NULL)
-ON CONFLICT (name) DO NOTHING;
+  ('yellow', 1, 5, 6, NULL),
+  ('blue', 2, 5, 1, ARRAY[1,2,3,4,5]),
+  ('red', 3, 5, 1, NULL)
+ON CONFLICT (name) DO UPDATE SET
+  point_value = EXCLUDED.point_value,
+  max_per_day = EXCLUDED.max_per_day,
+  available_on_dow = EXCLUDED.available_on_dow;
 
 -- Optional: RLS (Row Level Security). For first version with anon key, you may allow all.
 -- Uncomment and adjust when you have proper auth (e.g. user_id from session).
