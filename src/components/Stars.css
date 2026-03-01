@@ -7,6 +7,7 @@
   padding: 6px 10px;
   margin-left: 12px;
   vertical-align: middle;
+  font-family: var(--font-sans);
 }
 
 /* Each star type + count as one visual unit (icon and number grouped) */
@@ -25,8 +26,8 @@
 }
 
 .star-count {
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 0.875rem;
+  font-weight: var(--font-weight-medium);
   color: #fff;
   line-height: 1;
   min-width: 1ch;
@@ -49,6 +50,6 @@
   }
 
   .star-count {
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
 }
