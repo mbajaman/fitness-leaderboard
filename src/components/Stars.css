@@ -1,40 +1,54 @@
 .stars-container {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 10px;
   background-color: #ffffff1a;
   border-radius: 8px;
-  padding: 4px 8px;
+  padding: 6px 10px;
   margin-left: 12px;
   vertical-align: middle;
 }
 
+/* Each star type + count as one visual unit (icon and number grouped) */
+.star-pair {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+}
+
 .star-icon {
-  width: 16px;
-  height: 16px;
+  width: 18px;
+  height: 18px;
   object-fit: contain;
+  flex-shrink: 0;
 }
 
 .star-count {
   font-size: 14px;
   font-weight: 500;
   color: #fff;
-  margin-left: 2px;
+  line-height: 1;
+  min-width: 1ch;
 }
 
 @media screen and (max-width: 600px) {
   .stars-container {
-    margin-left: -6px;
-    padding: 2px 6px;
-    gap: 2px;
+    margin-left: 4px;
+    padding: 4px 8px;
+    gap: 8px;
+  }
+
+  .star-pair {
+    gap: 3px;
   }
 
   .star-icon {
-    width: 14px;
-    height: 14px;
+    width: 16px;
+    height: 16px;
   }
 
   .star-count {
-    font-size: 12px;
+    font-size: 13px;
   }
 }

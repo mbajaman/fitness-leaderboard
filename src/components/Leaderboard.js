@@ -31,11 +31,15 @@ const Leaderboard = () => {
       }
 
       const userIds = scoresData.map(r => r.user_id);
-      const { data: usersData, error: usersError } = await supabase
-        .from('users')
-        .select('id, username')
-        .in('id', userIds);
+      const [usersResult, entriesResult] = await Promise.all([
+        supabase.from('users').select('id, username').in('id', userIds),
+        supabase
+          .from('daily_star_entries')
+          .select('user_id, quantity, star_types(name)')
+          .in('user_id', userIds),
+      ]);
 
+      const { data: usersData, error: usersError } = usersResult;
       if (usersError) throw usersError;
 
       const userMap = (usersData || []).reduce((acc, u) => {
@@ -43,12 +47,29 @@ const Leaderboard = () => {
         return acc;
       }, {});
 
-      const merged = scoresData.map(row => ({
-        id: row.user_id,
-        name: userMap[row.user_id] || 'Unknown',
-        total_score: Number(row.total_score),
-        updated_at: row.updated_at,
-      }));
+      // Aggregate per-user star counts: [yellow, blue, red] (order matches Stars.js icons)
+      const starOrder = ['yellow', 'blue', 'red'];
+      const starCountsByUser = (entriesResult.data || []).reduce((acc, row) => {
+        const uid = row.user_id;
+        const name = row.star_types?.name;
+        if (!acc[uid]) acc[uid] = { yellow: 0, blue: 0, red: 0 };
+        if (starOrder.includes(name)) acc[uid][name] = (acc[uid][name] || 0) + Number(row.quantity || 0);
+        return acc;
+      }, {});
+
+      const merged = scoresData.map(row => {
+        const uid = row.user_id;
+        const counts = starCountsByUser[uid];
+        return {
+          id: uid,
+          name: userMap[uid] || 'Unknown',
+          total_score: Number(row.total_score),
+          updated_at: row.updated_at,
+          starCounts: counts
+            ? [counts.yellow || 0, counts.blue || 0, counts.red || 0]
+            : [0, 0, 0],
+        };
+      });
       setLeaderboardData(merged);
       const latest = merged.reduce(
         (a, b) => (new Date(a.updated_at) > new Date(b.updated_at) ? a : b),
@@ -137,11 +158,11 @@ const Leaderboard = () => {
               <div className="name">
                 {entry.name}
                 <span className="stars-inline">
-                  <Stars score={entry.total_score} name={entry.name} />
+                  <Stars score={entry.total_score} starCounts={entry.starCounts} />
                 </span>
               </div>
               <div className="stars-cell">
-                <Stars score={entry.total_score} name={entry.name} />
+                <Stars score={entry.total_score} starCounts={entry.starCounts} />
               </div>
               <div className="score">{entry.total_score}</div>
             </div>
