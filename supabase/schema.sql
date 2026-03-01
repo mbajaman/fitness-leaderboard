@@ -2,10 +2,11 @@
 -- Run this in the Supabase SQL Editor to create tables, function, and trigger.
 -- After running, you can drop the old `leaderboard` and `account` tables if they exist.
 
--- Users (username-only auth)
+-- Users (username-only auth; is_tag_team = true when registered as Tag-Team)
 CREATE TABLE IF NOT EXISTS users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   username TEXT UNIQUE NOT NULL,
+  is_tag_team BOOLEAN NOT NULL DEFAULT false,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 

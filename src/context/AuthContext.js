@@ -33,25 +33,28 @@ export function AuthProvider({ children }) {
     }
   };
 
-  const register = async username => {
+  const register = async (username, isTagTeam = false) => {
     const { data, error } = await supabase
       .from('users')
-      .insert({ username: username.trim() })
-      .select('id, username')
+      .insert({
+        username: username.trim(),
+        is_tag_team: !!isTagTeam,
+      })
+      .select('id, username, is_tag_team')
       .single();
     if (error) throw error;
-    setSession({ id: data.id, username: data.username });
+    setSession({ id: data.id, username: data.username, is_tag_team: data.is_tag_team });
     return data;
   };
 
   const login = async username => {
     const { data, error } = await supabase
       .from('users')
-      .select('id, username')
+      .select('id, username, is_tag_team')
       .eq('username', username.trim())
       .single();
     if (error || !data) return null;
-    setSession({ id: data.id, username: data.username });
+    setSession({ id: data.id, username: data.username, is_tag_team: data.is_tag_team });
     return data;
   };
 
