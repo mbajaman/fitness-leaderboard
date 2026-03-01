@@ -6,7 +6,7 @@ A React application that displays a fitness leaderboard by fetching data from a 
 
 ### Prerequisites
 - Node.js (v14 or later)
-- npm or yarn
+- pnpm or yarn
 - Supabase account and project
 
 ### Installation
@@ -19,7 +19,7 @@ cd fitness-leaderboard
 
 2. Install dependencies:
 ```
-npm install
+pnpm install
 ```
 or
 ```
@@ -34,19 +34,15 @@ REACT_APP_SUPABASE_ANON_KEY=your_supabase_anon_key
 
 ### Supabase Setup
 
-1. Create a new Supabase project
-2. Create a table called `scores` with the following columns:
-   - `id` (uuid, primary key)
-   - `name` (text, not null)
-   - `score` (integer, not null)
-   - `created_at` (timestamp with time zone, default: now())
-
-3. Add some sample data to test the leaderboard
+1. Create a new Supabase project.
+2. In the Supabase SQL Editor, run the schema script: **`supabase/schema.sql`**
+   - This creates `users`, `star_types`, `daily_star_entries`, and `user_scores` tables, plus the score-calculation function and triggers.
+   - Star types (yellow, blue, red, green) are seeded with default point values; you can edit `star_types` and `available_on_dow` for day-specific stars.
 
 ### Running the Application
 
 ```
-npm start
+pnpm start
 ```
 or
 ```
@@ -57,11 +53,11 @@ The application will be available at http://localhost:3000
 
 ## Features
 
-- Displays a leaderboard of fitness scores
-- Automatically sorts by score (highest first)
-- Highlights the top 3 performers
-- Allows refreshing the data
-- Responsive design
+- **Leaderboard** – Rankings by total score.
+- **Register / Login** – Username-only auth; session is stored in localStorage.
+- **Log stars** – Logged-in users can click on “+ Add” to pick a date and check off stars per day; score is computed on the database.
+- **Embed view** – Use `/embed` (e.g. `https://yoursite.com/fitness-leaderboard/embed`) in an iframe (e.g. SharePoint) for a minimal leaderboard view with optional Login.
+- Responsive design; top 3 highlighted with medals.
 
 ## Technologies Used
 

@@ -35,8 +35,49 @@
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
+  font-size: 1.5rem;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.header-username {
+  font-size: 0.95rem;
+  opacity: 0.9;
+}
+
+.header-btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.header-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.header-btn-add {
+  background: #28a745;
+  border-color: #28a745;
+}
+
+.header-btn-add:hover {
+  background: #218838;
+}
+
+.header-btn-logout {
+  background: transparent;
 }
 
 main {
@@ -69,17 +110,16 @@ footer p {
     align-items: center;
   }
 
-  .App-header h1 img:first-child {
+  .App-header h1 .logo:first-child {
     justify-self: start;
   }
 
-  .App-header h1 img:last-child {
+  .App-header h1 .logo:last-child {
     justify-self: end;
   }
 
   .logo {
-    width: 40px;
-    height: 40px;
+    font-size: 1.3rem;
   }
 }
 
@@ -94,8 +134,7 @@ footer p {
   }
 
   .logo {
-    width: 30px;
-    height: 30px;
+    font-size: 1.1rem;
   }
 
   .App-header p {

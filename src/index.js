@@ -1,13 +1,25 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
+import { AuthProvider } from './context/AuthContext';
 import App from './App';
+import EmbedPage from './pages/EmbedPage';
 import reportWebVitals from './reportWebVitals';
+
+const basename = process.env.PUBLIC_URL || '';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <AuthProvider>
+      <BrowserRouter basename={basename}>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/embed" element={<EmbedPage />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   </React.StrictMode>
 );
 
