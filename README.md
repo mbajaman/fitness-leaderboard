@@ -87,19 +87,19 @@ The app can be used from Slack via Supabase Edge Functions. Users link their Sla
   `https://YOUR_PROJECT_REF.supabase.co/functions/v1/slack-fitness`  
   (replace `YOUR_PROJECT_REF` with your Supabase project reference):
 
-  | Command               | Short description                          |
-  |-----------------------|--------------------------------------------|
-  | `/fitness-link`       | Link Slack to leaderboard (use code from web app) |
-  | `/fitness-log`        | Log activity/daily/bonus stars             |
-  | `/fitness-score`      | Show my score and star breakdown            |
-  | `/fitness-leaderboard`| Show top N (e.g. `/fitness-leaderboard 10`) |
+  | Command       | Short description                          |
+  |---------------|--------------------------------------------|
+  | `/link`       | Link Slack to leaderboard (use code from web app) |
+  | `/log`        | Log activity/daily/bonus stars             |
+  | `/score`      | Show my score and star breakdown            |
+  | `/leaderboard`| Show top N (e.g. `/leaderboard 10`)        |
 
 - **OAuth & Permissions** – Bot token scopes: `commands` (required). Optionally `chat:write` if you post to channels later.
 
 **4. Usage**
 
-- In the web app, log in and click **Connect Slack**. Copy the code shown, then in Slack run: `/fitness-link YOUR_CODE`.
-- After linking: `/fitness-log 3 activity` (3 yellow stars today), `/fitness-log daily`, `/fitness-score`, `/fitness-leaderboard`.
+- In the web app, log in and click **Connect Slack**. Copy the code shown, then in Slack run: `/link YOUR_CODE`.
+- After linking: `/log 3 activity` (3 yellow stars today), `/log daily`, `/score`, `/leaderboard`.
 - Only March dates are accepted for logging (challenge month).
 
 ## Technologies Used
