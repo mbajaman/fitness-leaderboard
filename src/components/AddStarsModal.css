@@ -12,6 +12,7 @@
 }
 
 .add-stars-modal {
+  font-family: var(--font-sans);
   background-color: #fff;
   border-radius: 8px;
   width: 90%;
@@ -32,7 +33,9 @@
 
 .add-stars-header h2 {
   margin: 0;
+  font-family: var(--font-heading);
   font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
   color: #343a40;
   display: flex;
   align-items: center;
@@ -49,7 +52,7 @@
   background-color: #6c757d;
   color: #fff;
   font-size: 0.75rem;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   cursor: help;
 }
 
@@ -81,7 +84,7 @@
 .add-stars-date label {
   display: block;
   margin-bottom: 6px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: #343a40;
 }
 
@@ -92,6 +95,7 @@
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 1rem;
+  font-weight: var(--font-weight-normal);
   background: #fff;
   box-sizing: border-box;
 }
@@ -130,7 +134,7 @@
 }
 
 .add-stars-row-name {
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   flex: 1;
   min-width: 0;
 }
@@ -178,7 +182,7 @@
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 0.8rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   background: #fff;
 }
 

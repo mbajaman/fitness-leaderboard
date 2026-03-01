@@ -12,6 +12,7 @@
 }
 
 .auth-modal {
+  font-family: var(--font-sans);
   background-color: #fff;
   border-radius: 8px;
   width: 90%;
@@ -31,7 +32,9 @@
 
 .auth-modal-header h2 {
   margin: 0;
+  font-family: var(--font-heading);
   font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
   color: #343a40;
 }
 
@@ -65,9 +68,8 @@
   border-radius: 8px 8px 0 0;
   margin-bottom: -1px;
   background: transparent;
-  font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   letter-spacing: 0.03em;
   color: rgba(0, 0, 0, 0.5);
   cursor: pointer;
@@ -122,7 +124,7 @@
 .auth-form .form-group label {
   display: block;
   margin-bottom: 5px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: #495057;
 }
 
@@ -132,6 +134,7 @@
   border: 1px solid #ced4da;
   border-radius: 4px;
   font-size: 1rem;
+  font-weight: var(--font-weight-normal);
   background-color: white;
   box-sizing: border-box;
 }
@@ -153,6 +156,7 @@
   border-radius: 4px;
   padding: 10px 15px;
   font-size: 1rem;
+  font-weight: var(--font-weight-medium);
   cursor: pointer;
   width: 100%;
 }
