@@ -57,7 +57,12 @@ Deno.serve(async (req) => {
   const sig = req.headers.get('X-Slack-Signature');
   const ts = req.headers.get('X-Slack-Request-Timestamp');
   if (!(await verifySlackRequest(rawBody, sig, ts))) {
-    return new Response(JSON.stringify({ error: 'Invalid signature' }), { status: 401, headers: { 'Content-Type': 'application/json' } });
+    const hint = !SLACK_SIGNING_SECRET
+      ? 'SLACK_SIGNING_SECRET is not set in Supabase Edge Function secrets.'
+      : !sig || !ts
+        ? 'Slack signature headers missing (request may not be from Slack).'
+        : 'Signature mismatch. In Supabase set SLACK_SIGNING_SECRET to the exact Signing Secret from Slack (Basic Information → App Credentials), then redeploy.';
+    return slackJson(`Verification failed. ${hint}`);
   }
 
   const form = parseFormBody(rawBody);
@@ -76,9 +81,9 @@ Deno.serve(async (req) => {
     return u;
   };
 
-  if (command === '/fitness-link') {
+  if (command === '/link') {
     const code = text.replace(/\s+/g, ' ').trim().toUpperCase();
-    if (!code) return slackJson('Usage: /fitness-link <CODE>\nGet your code from the leaderboard site (Connect Slack).');
+    if (!code) return slackJson('Usage: /link <CODE>\nGet your code from the leaderboard site (Connect Slack).');
     const { data: linkRow, error: linkErr } = await supabase.from('slack_link_codes').select('user_id').eq('code', code).gt('expires_at', new Date().toISOString()).maybeSingle();
     if (linkErr || !linkRow) return slackJson('Invalid or expired code. Get a new code from the leaderboard site.');
     const { error: upsertErr } = await supabase.from('slack_user_links').upsert(
@@ -87,12 +92,12 @@ Deno.serve(async (req) => {
     );
     if (upsertErr) return slackJson('Something went wrong. Try again or use the web app.');
     await supabase.from('slack_link_codes').delete().eq('code', code);
-    return slackJson('Your Slack account is now linked to the leaderboard. You can use /fitness-log, /fitness-score, and /fitness-leaderboard.');
+    return slackJson('Your Slack account is now linked to the leaderboard. You can use /log, /score, and /leaderboard.');
   }
 
-  if (command === '/fitness-score') {
+  if (command === '/score') {
     const user = await getLeaderboardUser();
-    if (!user) return slackJson('Your Slack account is not linked. Go to the leaderboard site and use "Connect Slack", then run /fitness-link <code>.');
+    if (!user) return slackJson('Your Slack account is not linked. Go to the leaderboard site and use "Connect Slack", then run /link <code>.');
     const { data: scoreRow } = await supabase.from('user_scores').select('total_score').eq('user_id', user.id).single();
     const { data: entries } = await supabase.from('daily_star_entries').select('quantity, star_types(name)').eq('user_id', user.id);
     const total = scoreRow?.total_score ?? 0;
@@ -105,9 +110,9 @@ Deno.serve(async (req) => {
     return slackJson(msg);
   }
 
-  if (command === '/fitness-log') {
+  if (command === '/log') {
     const user = await getLeaderboardUser();
-    if (!user) return slackJson('Your Slack account is not linked. Go to the leaderboard site and use "Connect Slack", then run /fitness-link <code>.');
+    if (!user) return slackJson('Your Slack account is not linked. Go to the leaderboard site and use "Connect Slack", then run /link <code>.');
     const parts = text ? text.replace(/\s+/g, ' ').trim().split(' ').filter(Boolean) : [];
     let dateStr = toDateStr(new Date());
     let typeArg = '';
@@ -140,7 +145,7 @@ Deno.serve(async (req) => {
     if (dateStr < marchStart || dateStr > marchEnd) return slackJson(`Only March dates are allowed (${marchStart} to ${marchEnd}).`);
     const typeMap: Record<string, string> = { activity: 'yellow', activities: 'yellow', daily: 'blue', bonus: 'red', yellow: 'yellow', blue: 'blue', red: 'red' };
     const starName = typeMap[typeArg.toLowerCase()] || typeMap[typeArg.toLowerCase().replace(/s$/, '')];
-    if (!starName) return slackJson('Usage: /fitness-log [YYYY-MM-DD] activity|daily|bonus [1-6 for activity]\nExample: /fitness-log 3 activity');
+    if (!starName) return slackJson('Usage: /log [YYYY-MM-DD] activity|daily|bonus [1-6 for activity]\nExample: /log 3 activity');
     const { data: starTypes } = await supabase.from('star_types').select('id, name, max_per_day').in('name', ['yellow', 'blue', 'red']);
     const star = (starTypes || []).find((s: { name: string }) => s.name === starName);
     if (!star) return slackJson('Star type not found.');
@@ -155,7 +160,7 @@ Deno.serve(async (req) => {
     return slackJson(`Logged ${quantity} ${label} star(s) for ${dateStr}.`);
   }
 
-  if (command === '/fitness-leaderboard') {
+  if (command === '/leaderboard') {
     const limit = Math.min(20, Math.max(1, parseInt(text.trim(), 10) || 10));
     const { data: rows } = await supabase.from('user_scores').select('user_id, total_score').order('total_score', { ascending: false }).limit(limit);
     if (!rows || rows.length === 0) return slackJson('No leaderboard data yet.');
@@ -169,5 +174,5 @@ Deno.serve(async (req) => {
     return slackJson('*Leaderboard*\n' + lines.join('\n'));
   }
 
-  return slackJson(`Unknown command: ${command}. Use /fitness-link, /fitness-log, /fitness-score, or /fitness-leaderboard.`);
+  return slackJson(`Unknown command: ${command}. Use /link, /log, /score, or /leaderboard.`);
 });

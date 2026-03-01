@@ -1,0 +1,54 @@
+display_information:
+  name: Swole Bot
+  description: Less scrolling, more strolling.
+  background_color: "#2e2e2e"
+features:
+  app_home:
+    home_tab_enabled: false
+    messages_tab_enabled: true
+    messages_tab_read_only_enabled: false
+  bot_user:
+    display_name: Swole Bot
+    always_online: true
+  slash_commands:
+    - command: /log
+      url: "https://vemjfizpxnupildbzrmn.supabase.co/functions/v1/slack-fitness"
+      description: Log activity/challenge stars for today (or a given date)
+      should_escape: false
+    - command: /score
+      url: "https://vemjfizpxnupildbzrmn.supabase.co/functions/v1/slack-fitness"
+      description: Show my score and star breakdown
+      should_escape: false
+    - command: /leaderboard
+      url: "https://vemjfizpxnupildbzrmn.supabase.co/functions/v1/slack-fitness"
+      description: Show the leaderboard
+      should_escape: false
+    - command: /link
+      url: "https://vemjfizpxnupildbzrmn.supabase.co/functions/v1/slack-fitness"
+      description: Link Slack account to leaderboard (with code)
+      should_escape: false
+oauth_config:
+  scopes:
+    user:
+      - search:read.public
+      - search:read.private
+      - search:read.mpim
+      - search:read.im
+      - search:read.files
+      - search:read.users
+      - chat:write
+      - channels:history
+      - groups:history
+      - mpim:history
+      - im:history
+      - canvases:read
+      - canvases:write
+      - users:read
+      - users:read.email
+    bot:
+      - chat:write
+      - commands
+settings:
+  org_deploy_enabled: false
+  socket_mode_enabled: false
+  token_rotation_enabled: false

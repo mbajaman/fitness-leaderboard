@@ -4,7 +4,7 @@ ALTER TABLE users
 
 CREATE INDEX IF NOT EXISTS idx_users_slack_user_id ON users(slack_user_id) WHERE slack_user_id IS NOT NULL;
 
--- One-time codes for "Connect Slack" flow (web app creates, user enters in /fitness-link)
+-- One-time codes for "Connect Slack" flow (web app creates, user enters in /link)
 CREATE TABLE IF NOT EXISTS slack_link_codes (
   code TEXT PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

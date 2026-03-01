@@ -99,7 +99,7 @@ function ConnectSlack() {
           {code && (
             <div className="connect-slack-code-box">
               <p className="connect-slack-code-label">In Slack, run:</p>
-              <p className="connect-slack-code-command">/fitness-link {code}</p>
+              <p className="connect-slack-code-command">/link {code}</p>
               <p className="connect-slack-code-hint">Code expires in 15 minutes.</p>
             </div>
           )}

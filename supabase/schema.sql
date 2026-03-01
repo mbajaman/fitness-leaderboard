@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS slack_user_links (
 );
 CREATE INDEX IF NOT EXISTS idx_slack_user_links_user_id ON slack_user_links(user_id);
 
--- One-time codes for Connect Slack flow (web creates code, user runs /fitness-link <code> in Slack)
+-- One-time codes for Connect Slack flow (web creates code, user runs /link <code> in Slack)
 CREATE TABLE IF NOT EXISTS slack_link_codes (
   code TEXT PRIMARY KEY,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
