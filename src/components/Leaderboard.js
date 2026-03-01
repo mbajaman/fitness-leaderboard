@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
 import Stars from './Stars';
+
 const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
   const [lastUpdated, setLastUpdated] = useState(null);
@@ -16,20 +17,46 @@ const Leaderboard = () => {
   const fetchLeaderboardData = async () => {
     try {
       setLoading(true);
+      const { data: scoresData, error: scoresError } = await supabase
+        .from('user_scores')
+        .select('user_id, total_score, updated_at')
+        .order('total_score', { ascending: false });
 
-      // Query the leaderboard data from Supabase
-      const { data, error } = await supabase
-        .from('leaderboard')
-        .select('id, name, scores')
-        .order('scores', { ascending: false });
+      if (scoresError) throw scoresError;
 
-      if (error) {
-        throw error;
+      if (!scoresData || scoresData.length === 0) {
+        setLeaderboardData([]);
+        setLoading(false);
+        return;
       }
 
-      setLeaderboardData(data || []);
-    } catch (error) {
-      console.error('Error fetching leaderboard data:', error);
+      const userIds = scoresData.map(r => r.user_id);
+      const { data: usersData, error: usersError } = await supabase
+        .from('users')
+        .select('id, username')
+        .in('id', userIds);
+
+      if (usersError) throw usersError;
+
+      const userMap = (usersData || []).reduce((acc, u) => {
+        acc[u.id] = u.username;
+        return acc;
+      }, {});
+
+      const merged = scoresData.map(row => ({
+        id: row.user_id,
+        name: userMap[row.user_id] || 'Unknown',
+        total_score: Number(row.total_score),
+        updated_at: row.updated_at,
+      }));
+      setLeaderboardData(merged);
+      const latest = merged.reduce(
+        (a, b) => (new Date(a.updated_at) > new Date(b.updated_at) ? a : b),
+        merged[0]
+      );
+      if (latest) setLastUpdated(latest.updated_at);
+    } catch (err) {
+      console.error('Error fetching leaderboard data:', err);
       setError('Failed to fetch leaderboard data. Please try again later.');
     } finally {
       setLoading(false);
@@ -37,43 +64,32 @@ const Leaderboard = () => {
   };
 
   const updateLastUpdated = async () => {
-    const lastUpdated = await supabase
-      .from('leaderboard')
+    const { data } = await supabase
+      .from('user_scores')
       .select('updated_at')
       .order('updated_at', { ascending: false })
       .limit(1);
-
-    setLastUpdated(lastUpdated);
+    if (data && data[0]) setLastUpdated(data[0].updated_at);
   };
 
-  // Format date and time in a nice, readable format
   const formatDateTime = dateTimeStr => {
     if (!dateTimeStr) return 'N/A';
-
     try {
       const date = new Date(dateTimeStr);
-
-      // Check if date is valid
       if (isNaN(date.getTime())) return 'Invalid date';
-
-      // Format options
-      const options = {
+      return date.toLocaleString('en-US', {
         weekday: 'long',
         year: 'numeric',
         month: 'short',
         day: 'numeric',
         hour: '2-digit',
         minute: '2-digit',
-      };
-
-      return date.toLocaleString('en-US', options);
-    } catch (error) {
-      console.error('Error formatting date:', error);
+      });
+    } catch (e) {
       return 'Date format error';
     }
   };
 
-  // Function to get medal class based on rank
   const getMedalClass = index => {
     if (index === 0) return 'gold-medal';
     if (index === 1) return 'silver-medal';
@@ -81,7 +97,6 @@ const Leaderboard = () => {
     return '';
   };
 
-  // Function to get medal emoji based on rank
   const getMedalEmoji = index => {
     if (index === 0) return '🥇';
     if (index === 1) return '🥈';
@@ -92,14 +107,11 @@ const Leaderboard = () => {
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
-      {lastUpdated && lastUpdated.data && lastUpdated.data[0] && (
+      {lastUpdated && (
         <div className="last-updated-container">
           <span className="last-updated-icon">🕒</span>
           <span className="last-updated-text">
-            Last updated:{' '}
-            <span className="last-updated-date">
-              {formatDateTime(lastUpdated.data[0].updated_at)}
-            </span>
+            Last updated: <span className="last-updated-date">{formatDateTime(lastUpdated)}</span>
           </span>
         </div>
       )}
@@ -115,6 +127,7 @@ const Leaderboard = () => {
           <div className="leaderboard-header">
             <div className="rank">Rank</div>
             <div className="name">Name</div>
+            <div className="stars-header">Stars</div>
             <div className="score">Score</div>
           </div>
 
@@ -123,14 +136,14 @@ const Leaderboard = () => {
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">
                 {entry.name}
-                {window.innerWidth < 768 && <Stars count={entry.scores} name={entry.name} />}
+                <span className="stars-inline">
+                  <Stars score={entry.total_score} name={entry.name} />
+                </span>
               </div>
-              {window.innerWidth > 768 && (
-                <div>
-                  <Stars count={entry.scores} name={entry.name} />
-                </div>
-              )}
-              <div className="score">{entry.scores}</div>
+              <div className="stars-cell">
+                <Stars score={entry.total_score} name={entry.name} />
+              </div>
+              <div className="score">{entry.total_score}</div>
             </div>
           ))}
         </div>

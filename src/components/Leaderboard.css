@@ -53,11 +53,25 @@
 
 .leaderboard-header {
   display: grid;
-  grid-template-columns: 80px 1fr 120px;
+  grid-template-columns: 80px 8rem 1fr 120px;
   background-color: transparent;
   font-weight: bold;
   padding: 15px;
   border-bottom: 1px solid #e9ecef;
+}
+
+.stars-header {
+  display: flex;
+  align-items: center;
+}
+
+.stars-cell {
+  display: flex;
+  align-items: center;
+}
+
+.stars-inline {
+  display: none;
 }
 
 .leaderboard-row {
@@ -180,6 +194,10 @@
     grid-template-columns: 50px 1fr 80px;
   }
 
+  .leaderboard-header .stars-header {
+    display: none;
+  }
+
   .leaderboard-row {
     grid-template-columns: 50px 1fr 80px;
     padding: 10px;
@@ -194,6 +212,19 @@
     gap: 4px;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .leaderboard-row .stars-cell {
+    display: none;
+  }
+
+  .leaderboard-row .name .stars-inline {
+    display: inline;
+  }
+
+  .leaderboard-row .name {
+    flex-direction: row;
+    flex-wrap: wrap;
   }
 
   .gold-medal .rank,
