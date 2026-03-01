@@ -79,6 +79,7 @@ The app can be used from Slack via Supabase Edge Functions. Users link their Sla
   - **`SLACK_SIGNING_SECRET`** – From your Slack app: Basic Information → App Credentials → Signing Secret. Required for `slack-fitness`.
   - **`SUPABASE_ANON_KEY`** – Your project’s anon key (Project Settings → API → anon public). Required for `slack-create-link-code` so it can validate requests from the web app (which sends the same anon key). If Supabase already injects this for Edge Functions, you can skip it.
   - `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are usually set automatically for Edge Functions.
+- **Verify JWT:** Turn **off** “Verify JWT with legacy secret” (or “Enforce JWT”) for Edge Functions in Supabase (Project Settings → Edge Functions). Slack sends slash-command requests without a JWT; if verification is on, Supabase rejects them before they reach your function and Slack shows “dispatch_failed.”
 
 **3. Slack app**
 
