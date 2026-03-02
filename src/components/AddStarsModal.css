@@ -104,6 +104,15 @@
   gap: 12px;
 }
 
+.add-stars-fields {
+  /* Reserve space so the modal doesn't jump while loading */
+  min-height: 170px;
+}
+
+.add-stars-checkboxes-skeleton .add-stars-row {
+  cursor: default;
+}
+
 .add-stars-row {
   display: flex;
   align-items: center;

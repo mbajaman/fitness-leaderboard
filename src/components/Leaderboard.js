@@ -1,7 +1,48 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
 import Stars from './Stars';
+
+const LEADERBOARD_SKELETON_ROWS = 6;
+
+function LeaderboardSkeleton() {
+  return (
+    <div className="leaderboard" aria-hidden="true">
+      <div className="leaderboard-header">
+        <div className="rank">
+          <Skeleton width={28} height={18} />
+        </div>
+        <div className="name">
+          <Skeleton width={60} height={18} />
+        </div>
+        <div className="stars-header">
+          <Skeleton width={50} height={18} />
+        </div>
+        <div className="score">
+          <Skeleton width={36} height={18} />
+        </div>
+      </div>
+      {Array.from({ length: LEADERBOARD_SKELETON_ROWS }, (_, i) => (
+        <div key={i} className="leaderboard-row leaderboard-row-skeleton">
+          <div className="rank">
+            <Skeleton width={28} height={24} />
+          </div>
+          <div className="name">
+            <Skeleton width={100} height={20} />
+          </div>
+          <div className="stars-cell">
+            <Skeleton width={72} height={16} />
+          </div>
+          <div className="score">
+            <Skeleton width={32} height={20} />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 const Leaderboard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
@@ -9,12 +50,7 @@ const Leaderboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetchLeaderboardData();
-    updateLastUpdated();
-  }, []);
-
-  const fetchLeaderboardData = async () => {
+  const fetchLeaderboardData = useCallback(async () => {
     try {
       setLoading(true);
       const { data: scoresData, error: scoresError } = await supabase
@@ -81,16 +117,67 @@ const Leaderboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const updateLastUpdated = async () => {
+  const updateLastUpdated = useCallback(async () => {
     const { data } = await supabase
       .from('user_scores')
       .select('updated_at')
       .order('updated_at', { ascending: false })
       .limit(1);
     if (data && data[0]) setLastUpdated(data[0].updated_at);
-  };
+  }, []);
+
+  useEffect(() => {
+    fetchLeaderboardData();
+    updateLastUpdated();
+  }, [fetchLeaderboardData, updateLastUpdated]);
+
+  const refreshTimerRef = useRef(null);
+  const scheduleRefresh = useCallback(() => {
+    if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
+    refreshTimerRef.current = setTimeout(() => {
+      fetchLeaderboardData();
+      updateLastUpdated();
+    }, 250);
+  }, [fetchLeaderboardData, updateLastUpdated]);
+
+  useEffect(() => {
+    // Auto-refresh when the app regains focus (common "background stale" case).
+    const onFocus = () => scheduleRefresh();
+    const onVisibility = () => {
+      if (document.visibilityState === 'visible') scheduleRefresh();
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onVisibility);
+    };
+  }, [scheduleRefresh]);
+
+  useEffect(() => {
+    // Supabase Realtime works fine from GitHub Pages since it's browser→Supabase.
+    // This removes the need for manual "Refresh Leaderboard" in most cases.
+    const channel = supabase
+      .channel('leaderboard-live')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'user_scores' },
+        () => scheduleRefresh()
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'daily_star_entries' },
+        () => scheduleRefresh()
+      )
+      .subscribe();
+
+    return () => {
+      if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
+      supabase.removeChannel(channel);
+    };
+  }, [scheduleRefresh]);
 
   const formatDateTime = dateTimeStr => {
     if (!dateTimeStr) return 'N/A';
@@ -137,7 +224,7 @@ const Leaderboard = () => {
       )}
 
       {loading ? (
-        <p className="loading">Loading leaderboard data...</p>
+        <LeaderboardSkeleton />
       ) : error ? (
         <p className="error">{error}</p>
       ) : leaderboardData.length === 0 ? (
