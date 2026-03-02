@@ -92,6 +92,16 @@
   background-color: #f8f9fa1c;
 }
 
+.leaderboard-row-skeleton:hover {
+  background-color: transparent;
+}
+
+/* Dark-theme skeleton placeholders on leaderboard */
+.leaderboard .react-loading-skeleton {
+  --base-color: #323137;
+  --highlight-color: #454850;
+}
+
 /* Enhanced medal styling */
 .gold-medal {
   background: linear-gradient(to right, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));

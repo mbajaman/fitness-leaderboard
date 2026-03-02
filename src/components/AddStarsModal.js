@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
 import { supabase } from '../db/supabaseClient';
 import { useAuth } from '../context/AuthContext';
 import yellowStarIcon from '../assets/yellow-star.svg';
@@ -24,6 +26,27 @@ const STAR_TOOLTIP =
   'Daily challenge (blue): 50 push-ups or squats (or combo), weekdays 9am–5pm, 1 per day. ' +
   'Bonus challenge (red): Time-bound challenges set by commissioners, 1 per day.';
 
+function StarRowsSkeleton() {
+  return (
+    <div className="add-stars-checkboxes add-stars-checkboxes-skeleton" aria-hidden="true">
+      <div className="add-stars-row add-stars-row-yellow">
+        <Skeleton height={24} width={24} borderRadius={6} />
+        <Skeleton height={14} width={160} />
+      </div>
+      <div className="add-stars-row">
+        <Skeleton height={24} width={24} borderRadius={6} />
+        <Skeleton height={14} width={160} />
+        <Skeleton height={18} width={18} borderRadius={4} />
+      </div>
+      <div className="add-stars-row">
+        <Skeleton height={24} width={24} borderRadius={6} />
+        <Skeleton height={14} width={160} />
+        <Skeleton height={18} width={18} borderRadius={4} />
+      </div>
+    </div>
+  );
+}
+
 function todayStr() {
   const d = new Date();
   return d.toISOString().slice(0, 10);
@@ -45,27 +68,30 @@ const AddStarsModal = ({ isOpen, onClose }) => {
   const [selectedDate, setSelectedDate] = useState(() => clampToMarch(todayStr()));
   const [starTypes, setStarTypes] = useState([]);
   const [entries, setEntries] = useState({});
-  const [loading, setLoading] = useState(false);
+  const [typesLoading, setTypesLoading] = useState(false);
+  const [entriesLoading, setEntriesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const fetchStarTypes = useCallback(async () => {
+    setTypesLoading(true);
     const { data, error } = await supabase
       .from('star_types')
       .select('id, name, display_order, point_value, available_on_dow')
       .order('display_order', { ascending: true });
+    setTypesLoading(false);
     if (!error) setStarTypes(data || []);
   }, []);
 
   const fetchEntries = useCallback(
     async starTypesList => {
       if (!user || !isOpen) return;
-      setLoading(true);
+      setEntriesLoading(true);
       const { data, error } = await supabase
         .from('daily_star_entries')
         .select('star_type_id, checked, quantity')
         .eq('user_id', user.id)
         .eq('date', selectedDate);
-      setLoading(false);
+      setEntriesLoading(false);
       if (error) {
         setEntries({});
         return;
@@ -148,6 +174,8 @@ const AddStarsModal = ({ isOpen, onClose }) => {
 
   if (!isOpen) return null;
 
+  const loading = typesLoading || entriesLoading;
+
   return (
     <div className="add-stars-overlay" onClick={onClose}>
       <div className="add-stars-modal" onClick={e => e.stopPropagation()}>
@@ -175,23 +203,59 @@ const AddStarsModal = ({ isOpen, onClose }) => {
               maxDate={MARCH_END()}
             />
           </div>
-          {loading ? (
-            <p className="add-stars-loading">Loading...</p>
-          ) : (
-            <div className="add-stars-checkboxes">
-              {starTypes
-                .filter(st => ['yellow', 'blue', 'red'].includes(st.name))
-                .map(st => {
-                  const available = isAvailable(st);
-                  const isYellow = st.name === 'yellow';
-                  const label = STAR_LABELS[st.name] || st.name;
+          <div className="add-stars-fields" aria-busy={loading}>
+            {loading ? (
+              <StarRowsSkeleton />
+            ) : (
+              <div className="add-stars-checkboxes">
+                {starTypes
+                  .filter(st => ['yellow', 'blue', 'red'].includes(st.name))
+                  .map(st => {
+                    const available = isAvailable(st);
+                    const isYellow = st.name === 'yellow';
+                    const label = STAR_LABELS[st.name] || st.name;
 
-                  if (isYellow) {
-                    const count = Math.min(6, Math.max(0, Number(entries[st.id]) || 0));
+                    if (isYellow) {
+                      const count = Math.min(6, Math.max(0, Number(entries[st.id]) || 0));
+                      return (
+                        <div
+                          key={st.id}
+                          className={`add-stars-row add-stars-row-yellow ${!available ? 'add-stars-row-disabled' : ''}`}
+                        >
+                          <img
+                            src={STAR_ICONS[st.name] || yellowStarIcon}
+                            alt=""
+                            className="add-stars-row-icon"
+                          />
+                          <span className="add-stars-row-name">{label}</span>
+                          <div
+                            className="add-stars-yellow-group"
+                            aria-label={`${label}, up to 6 stars`}
+                          >
+                            {[1, 2, 3, 4, 5, 6].map(n => (
+                              <label key={n} className="add-stars-yellow-check">
+                                <input
+                                  type="checkbox"
+                                  checked={count >= n}
+                                  disabled={!available || saving}
+                                  onChange={() => {
+                                    const newCount = count >= n ? (count > n ? n : n - 1) : n;
+                                    handleYellowQuantity(st.id, newCount);
+                                  }}
+                                />
+                                <span className="add-stars-yellow-num">{n}</span>
+                              </label>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+
+                    const checked = !!entries[st.id];
                     return (
-                      <div
+                      <label
                         key={st.id}
-                        className={`add-stars-row add-stars-row-yellow ${!available ? 'add-stars-row-disabled' : ''}`}
+                        className={`add-stars-row ${!available ? 'add-stars-row-disabled' : ''}`}
                       >
                         <img
                           src={STAR_ICONS[st.name] || yellowStarIcon}
@@ -199,55 +263,21 @@ const AddStarsModal = ({ isOpen, onClose }) => {
                           className="add-stars-row-icon"
                         />
                         <span className="add-stars-row-name">{label}</span>
-                        <div
-                          className="add-stars-yellow-group"
-                          aria-label={`${label}, up to 6 stars`}
-                        >
-                          {[1, 2, 3, 4, 5, 6].map(n => (
-                            <label key={n} className="add-stars-yellow-check">
-                              <input
-                                type="checkbox"
-                                checked={count >= n}
-                                disabled={!available || saving}
-                                onChange={() => {
-                                  const newCount = count >= n ? (count > n ? n : n - 1) : n;
-                                  handleYellowQuantity(st.id, newCount);
-                                }}
-                              />
-                              <span className="add-stars-yellow-num">{n}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </div>
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          disabled={!available || saving}
+                          onChange={e => handleToggle(st.id, e.target.checked)}
+                        />
+                        {!available && (
+                          <span className="add-stars-unavailable">Not available this day</span>
+                        )}
+                      </label>
                     );
-                  }
-
-                  const checked = !!entries[st.id];
-                  return (
-                    <label
-                      key={st.id}
-                      className={`add-stars-row ${!available ? 'add-stars-row-disabled' : ''}`}
-                    >
-                      <img
-                        src={STAR_ICONS[st.name] || yellowStarIcon}
-                        alt=""
-                        className="add-stars-row-icon"
-                      />
-                      <span className="add-stars-row-name">{label}</span>
-                      <input
-                        type="checkbox"
-                        checked={checked}
-                        disabled={!available || saving}
-                        onChange={e => handleToggle(st.id, e.target.checked)}
-                      />
-                      {!available && (
-                        <span className="add-stars-unavailable">Not available this day</span>
-                      )}
-                    </label>
-                  );
-                })}
-            </div>
-          )}
+                  })}
+              </div>
+            )}
+          </div>
           {starTypes.length === 0 && !loading && (
             <p className="add-stars-empty">No star types configured. Run the Supabase schema.</p>
           )}
