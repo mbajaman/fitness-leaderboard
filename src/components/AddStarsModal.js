@@ -71,6 +71,7 @@ const AddStarsModal = ({ isOpen, onClose }) => {
   const [typesLoading, setTypesLoading] = useState(false);
   const [entriesLoading, setEntriesLoading] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [hoverActivityUpTo, setHoverActivityUpTo] = useState(0);
 
   const fetchStarTypes = useCallback(async () => {
     setTypesLoading(true);
@@ -231,9 +232,15 @@ const AddStarsModal = ({ isOpen, onClose }) => {
                           <div
                             className="add-stars-yellow-group"
                             aria-label={`${label}, up to 6 stars`}
+                            data-hover-up-to={available && !saving ? hoverActivityUpTo : 0}
+                            onMouseLeave={() => setHoverActivityUpTo(0)}
                           >
                             {[1, 2, 3, 4, 5, 6].map(n => (
-                              <label key={n} className="add-stars-yellow-check">
+                              <label
+                                key={n}
+                                className="add-stars-yellow-check"
+                                onMouseEnter={() => available && !saving && setHoverActivityUpTo(n)}
+                              >
                                 <input
                                   type="checkbox"
                                   checked={count >= n}
