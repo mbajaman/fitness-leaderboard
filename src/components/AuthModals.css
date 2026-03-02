@@ -13,12 +13,13 @@
 
 .auth-modal {
   font-family: var(--font-sans);
-  background-color: #fff;
-  border-radius: 8px;
+  background-color: #323137;
+  border-radius: 12px;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
   overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .auth-modal-header {
@@ -26,8 +27,8 @@
   justify-content: space-between;
   align-items: center;
   padding: 15px 20px;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  background-color: #2a2c30;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .auth-modal-header h2 {
@@ -35,7 +36,7 @@
   font-family: var(--font-heading);
   font-size: 1.5rem;
   font-weight: var(--font-weight-semibold);
-  color: #343a40;
+  color: #fff;
 }
 
 .auth-close {
@@ -43,19 +44,19 @@
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #6c757d;
+  color: #a8b7c5;
 }
 
 .auth-close:hover {
-  color: #343a40;
+  color: #fff;
 }
 
-/* Tabs: friendly font, light transparent bg, animated active state */
+/* Tabs: dark theme */
 .auth-tabs {
   display: flex;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   padding: 6px 16px 0;
-  background-color: rgba(0, 0, 0, 0.03);
+  background-color: rgba(0, 0, 0, 0.15);
   gap: 4px;
   min-height: 48px;
   align-items: stretch;
@@ -71,7 +72,7 @@
   font-size: 1rem;
   font-weight: var(--font-weight-medium);
   letter-spacing: 0.03em;
-  color: rgba(0, 0, 0, 0.5);
+  color: #a8b7c5;
   cursor: pointer;
   transition:
     color 0.25s ease,
@@ -82,15 +83,15 @@
 }
 
 .auth-tab:hover {
-  color: rgba(0, 0, 0, 0.75);
-  background-color: rgba(0, 0, 0, 0.04);
+  color: #e2e6ea;
+  background-color: rgba(255, 255, 255, 0.06);
 }
 
 .auth-tab.active {
-  color: #007bff;
-  background-color: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.95);
+  color: #fff;
+  background-color: #2a2c30;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid #2a2c30;
 }
 
 .auth-tab.active::after {
@@ -100,7 +101,7 @@
   bottom: -1px;
   width: 60%;
   height: 3px;
-  background: #007bff;
+  background: #28a745;
   border-radius: 3px 3px 0 0;
   transform: translateX(-50%);
   animation: auth-tab-underline 0.25s ease;
@@ -125,18 +126,34 @@
   display: block;
   margin-bottom: 5px;
   font-weight: var(--font-weight-semibold);
-  color: #495057;
+  color: #e2e6ea;
 }
 
 .auth-form .form-group input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ced4da;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
   font-size: 1rem;
   font-weight: var(--font-weight-normal);
-  background-color: white;
+  background-color: #2a2c30;
+  color: #e2e6ea;
   box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.auth-form .form-group input::placeholder {
+  color: #7a8290;
+}
+
+.auth-form .form-group input:hover:not(:disabled) {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.auth-form .form-group input:focus {
+  outline: none;
+  border-color: #28a745;
+  box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
 }
 
 .auth-form {
@@ -144,14 +161,14 @@
 }
 
 .auth-error {
-  color: #dc3545;
+  color: #f87171;
   margin: 0 0 15px;
   font-size: 0.9rem;
 }
 
 .auth-submit {
-  background-color: #007bff;
-  color: white;
+  background-color: #28a745;
+  color: #fff;
   border: none;
   border-radius: 4px;
   padding: 10px 15px;
@@ -159,28 +176,30 @@
   font-weight: var(--font-weight-medium);
   cursor: pointer;
   width: 100%;
+  transition: background-color 0.2s;
 }
 
-.auth-submit:hover {
-  background-color: #0069d9;
+.auth-submit:hover:not(:disabled) {
+  background-color: #218838;
 }
 
 .auth-submit:disabled {
-  background-color: #6c757d;
+  background-color: #454850;
+  color: #a8b7c5;
   cursor: not-allowed;
 }
 
 .auth-switch {
   margin: 15px 0 0;
   font-size: 0.9rem;
-  color: #6c757d;
+  color: #a8b7c5;
   text-align: center;
 }
 
 .auth-link {
   background: none;
   border: none;
-  color: #007bff;
+  color: #28a745;
   cursor: pointer;
   padding: 0;
   text-decoration: underline;
@@ -188,5 +207,5 @@
 }
 
 .auth-link:hover {
-  color: #0056b3;
+  color: #34c759;
 }
