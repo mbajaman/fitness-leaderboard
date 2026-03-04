@@ -68,7 +68,7 @@ const Leaderboard = () => {
 
       const userIds = scoresData.map(r => r.user_id);
       const [usersResult, entriesResult] = await Promise.all([
-        supabase.from('users').select('id, username').in('id', userIds),
+        supabase.from('users').select('id, username, is_tag_team').in('id', userIds),
         supabase
           .from('daily_star_entries')
           .select('user_id, quantity, star_types(name)')
@@ -79,7 +79,7 @@ const Leaderboard = () => {
       if (usersError) throw usersError;
 
       const userMap = (usersData || []).reduce((acc, u) => {
-        acc[u.id] = u.username;
+        acc[u.id] = { username: u.username, is_tag_team: u.is_tag_team };
         return acc;
       }, {});
 
@@ -99,7 +99,8 @@ const Leaderboard = () => {
         const counts = starCountsByUser[uid];
         return {
           id: uid,
-          name: userMap[uid] || 'Unknown',
+          name: userMap[uid]?.username || 'Unknown',
+          is_tag_team: userMap[uid]?.is_tag_team || false,
           total_score: Number(row.total_score),
           updated_at: row.updated_at,
           starCounts: counts ? [counts.yellow || 0, counts.blue || 0, counts.red || 0] : [0, 0, 0],
@@ -211,6 +212,14 @@ const Leaderboard = () => {
     return index + 1;
   };
 
+  const soloData = leaderboardData
+    .filter(entry => !entry.is_tag_team)
+    .sort((a,b) => b.total_score - a.total_score);
+
+  const tagTeamData = leaderboardData
+    .filter(entry => entry.is_tag_team)
+    .sort((a,b) => b.total_score - a.total_score);
+
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
@@ -230,15 +239,18 @@ const Leaderboard = () => {
       ) : leaderboardData.length === 0 ? (
         <p>No leaderboard data available.</p>
       ) : (
-        <div className="leaderboard">
-          <div className="leaderboard-header">
-            <div className="rank">Rank</div>
-            <div className="name">Name</div>
-            <div className="stars-header">Stars</div>
-            <div className="score">Score</div>
+        <div className="leaderboard-grid">
+          <div className="leaderboard-section">
+            <h3>Solo</h3>
+            <div className="leaderboard">
+            <div className="leaderboard-header">
+              <div className="rank">Rank</div>
+              <div className="name">Name</div>
+              <div className="stars-header">Stars</div>
+              <div className="score">Score</div>
+            </div>
           </div>
-
-          {leaderboardData.map((entry, index) => (
+          {soloData.map((entry, index) => (
             <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">
@@ -253,6 +265,33 @@ const Leaderboard = () => {
               <div className="score">{entry.total_score}</div>
             </div>
           ))}
+          </div>
+          <div className="leaderboard-section">
+          <h3>Tag Team</h3>
+          <div className="leaderboard">
+          <div className="leaderboard-header">
+            <div className="rank">Rank</div>
+            <div className="name">Name</div>
+            <div className="stars-header">Stars</div>
+            <div className="score">Score</div>
+          </div>
+        </div>
+        {tagTeamData.map((entry, index) => (
+          <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
+            <div className="rank">{getMedalEmoji(index)}</div>
+            <div className="name">
+              {entry.name}
+              <span className="stars-inline">
+                <Stars score={entry.total_score} starCounts={entry.starCounts} />
+              </span>
+            </div>
+            <div className="stars-cell">
+              <Stars score={entry.total_score} starCounts={entry.starCounts} />
+            </div>
+            <div className="score">{entry.total_score}</div>
+            </div>
+          ))}
+          </div>
         </div>
       )}
 
