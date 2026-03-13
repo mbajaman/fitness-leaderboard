@@ -225,7 +225,9 @@
   font-weight: var(--font-weight-medium);
   background: #323137;
   color: #a8b7c5;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-check:hover .add-stars-yellow-num {
@@ -239,18 +241,39 @@
   color: #000;
 }
 
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-check:hover input:checked + .add-stars-yellow-num {
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-check:hover
+  input:checked
+  + .add-stars-yellow-num {
   background-color: #ffca28;
   border-color: #e6ad00;
 }
 
 /* Range hover: hovering over box N highlights boxes 1 through N */
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='1'] .add-stars-yellow-check:nth-child(-n+1) .add-stars-yellow-num,
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='2'] .add-stars-yellow-check:nth-child(-n+2) .add-stars-yellow-num,
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='3'] .add-stars-yellow-check:nth-child(-n+3) .add-stars-yellow-num,
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='4'] .add-stars-yellow-check:nth-child(-n+4) .add-stars-yellow-num,
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='5'] .add-stars-yellow-check:nth-child(-n+5) .add-stars-yellow-num,
-.add-stars-row:not(.add-stars-row-disabled) .add-stars-yellow-group[data-hover-up-to='6'] .add-stars-yellow-check:nth-child(-n+6) .add-stars-yellow-num {
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='1']
+  .add-stars-yellow-check:nth-child(-n + 1)
+  .add-stars-yellow-num,
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='2']
+  .add-stars-yellow-check:nth-child(-n + 2)
+  .add-stars-yellow-num,
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='3']
+  .add-stars-yellow-check:nth-child(-n + 3)
+  .add-stars-yellow-num,
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='4']
+  .add-stars-yellow-check:nth-child(-n + 4)
+  .add-stars-yellow-num,
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='5']
+  .add-stars-yellow-check:nth-child(-n + 5)
+  .add-stars-yellow-num,
+.add-stars-row:not(.add-stars-row-disabled)
+  .add-stars-yellow-group[data-hover-up-to='6']
+  .add-stars-yellow-check:nth-child(-n + 6)
+  .add-stars-yellow-num {
   background-color: #ffca28;
   border-color: #e6ad00;
   color: #000;
@@ -271,7 +294,9 @@
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 4px;
   flex-shrink: 0;
-  transition: background-color 0.15s, border-color 0.15s;
+  transition:
+    background-color 0.15s,
+    border-color 0.15s;
 }
 
 .add-stars-row input[type='checkbox']:hover:not(:disabled) {

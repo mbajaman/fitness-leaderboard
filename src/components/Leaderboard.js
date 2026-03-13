@@ -162,15 +162,11 @@ const Leaderboard = () => {
     // This removes the need for manual "Refresh Leaderboard" in most cases.
     const channel = supabase
       .channel('leaderboard-live')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'user_scores' },
-        () => scheduleRefresh()
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_scores' }, () =>
+        scheduleRefresh()
       )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'daily_star_entries' },
-        () => scheduleRefresh()
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'daily_star_entries' }, () =>
+        scheduleRefresh()
       )
       .subscribe();
 
@@ -214,11 +210,11 @@ const Leaderboard = () => {
 
   const soloData = leaderboardData
     .filter(entry => !entry.is_tag_team)
-    .sort((a,b) => b.total_score - a.total_score);
+    .sort((a, b) => b.total_score - a.total_score);
 
   const tagTeamData = leaderboardData
     .filter(entry => entry.is_tag_team)
-    .sort((a,b) => b.total_score - a.total_score);
+    .sort((a, b) => b.total_score - a.total_score);
 
   return (
     <div className="leaderboard-container">
@@ -243,54 +239,55 @@ const Leaderboard = () => {
           <div className="leaderboard-section">
             <h3>Solo</h3>
             <div className="leaderboard">
-            <div className="leaderboard-header">
-              <div className="rank">Rank</div>
-              <div className="name">Name</div>
-              <div className="stars-header">Stars</div>
-              <div className="score">Score</div>
-            </div>
-          </div>
-          {soloData.map((entry, index) => (
-            <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
-              <div className="rank">{getMedalEmoji(index)}</div>
-              <div className="name">
-                {entry.name}
-                <span className="stars-inline">
-                  <Stars score={entry.total_score} starCounts={entry.starCounts} />
-                </span>
+              <div className="leaderboard-header">
+                <div className="rank">Rank</div>
+                <div className="name">Name</div>
+                <div className="stars-header">Stars</div>
+                <div className="score">Score</div>
               </div>
-              <div className="stars-cell">
-                <Stars score={entry.total_score} starCounts={entry.starCounts} />
-              </div>
-              <div className="score">{entry.total_score}</div>
+
+              {soloData.map((entry, index) => (
+                <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
+                  <div className="rank">{getMedalEmoji(index)}</div>
+                  <div className="name">
+                    {entry.name}
+                    <span className="stars-inline">
+                      <Stars score={entry.total_score} starCounts={entry.starCounts} />
+                    </span>
+                  </div>
+                  <div className="stars-cell">
+                    <Stars score={entry.total_score} starCounts={entry.starCounts} />
+                  </div>
+                  <div className="score">{entry.total_score}</div>
+                </div>
+              ))}
             </div>
-          ))}
           </div>
           <div className="leaderboard-section">
-          <h3>Tag Team</h3>
-          <div className="leaderboard">
-          <div className="leaderboard-header">
-            <div className="rank">Rank</div>
-            <div className="name">Name</div>
-            <div className="stars-header">Stars</div>
-            <div className="score">Score</div>
-          </div>
-        </div>
-        {tagTeamData.map((entry, index) => (
-          <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
-            <div className="rank">{getMedalEmoji(index)}</div>
-            <div className="name">
-              {entry.name}
-              <span className="stars-inline">
-                <Stars score={entry.total_score} starCounts={entry.starCounts} />
-              </span>
+            <h3>Tag Team</h3>
+            <div className="leaderboard">
+              <div className="leaderboard-header">
+                <div className="rank">Rank</div>
+                <div className="name">Name</div>
+                <div className="stars-header">Stars</div>
+                <div className="score">Score</div>
+              </div>
+              {tagTeamData.map((entry, index) => (
+                <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
+                  <div className="rank">{getMedalEmoji(index)}</div>
+                  <div className="name">
+                    {entry.name}
+                    <span className="stars-inline">
+                      <Stars score={entry.total_score} starCounts={entry.starCounts} />
+                    </span>
+                  </div>
+                  <div className="stars-cell">
+                    <Stars score={entry.total_score} starCounts={entry.starCounts} />
+                  </div>
+                  <div className="score">{entry.total_score}</div>
+                </div>
+              ))}
             </div>
-            <div className="stars-cell">
-              <Stars score={entry.total_score} starCounts={entry.starCounts} />
-            </div>
-            <div className="score">{entry.total_score}</div>
-            </div>
-          ))}
           </div>
         </div>
       )}
