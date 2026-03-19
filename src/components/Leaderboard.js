@@ -161,15 +161,11 @@ const Leaderboard = () => {
     // This removes the need for manual "Refresh Leaderboard" in most cases.
     const channel = supabase
       .channel('leaderboard-live')
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'user_scores' },
-        () => scheduleRefresh()
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'user_scores' }, () =>
+        scheduleRefresh()
       )
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: 'daily_star_entries' },
-        () => scheduleRefresh()
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'daily_star_entries' }, () =>
+        scheduleRefresh()
       )
       .subscribe();
 

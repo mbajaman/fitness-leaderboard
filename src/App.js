@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from './context/AuthContext';
+import NewsTicker from './components/NewsTicker';
 import Leaderboard from './components/Leaderboard';
 import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
@@ -80,6 +81,7 @@ function AppContent() {
 
   return (
     <div className="App">
+      <NewsTicker />
       <AppHeader onOpenAddStars={handleOpenAddStars} />
       <main>
         <Leaderboard />
