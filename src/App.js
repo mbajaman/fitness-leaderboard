@@ -6,12 +6,15 @@ import LoginModal from './components/LoginModal';
 import RegisterModal from './components/RegisterModal';
 import AddStarsModal from './components/AddStarsModal';
 import ConnectSlack from './components/ConnectSlack';
+import { areEntriesClosed, getEntriesClosedMessage } from './utils/challengeAvailability';
 import './App.css';
 
 function AppHeader({ onOpenAddStars }) {
   const { user, login, register, logout } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const entriesClosed = areEntriesClosed();
+  const entriesClosedMessage = getEntriesClosedMessage();
 
   return (
     <header className="App-header">
@@ -30,7 +33,13 @@ function AppHeader({ onOpenAddStars }) {
           <>
             <span className="header-username">{user.username}</span>
             <ConnectSlack />
-            <button type="button" className="header-btn header-btn-add" onClick={onOpenAddStars}>
+            <button
+              type="button"
+              className="header-btn header-btn-add"
+              onClick={onOpenAddStars}
+              disabled={entriesClosed}
+              title={entriesClosed ? entriesClosedMessage : undefined}
+            >
               + Add
             </button>
             <button type="button" className="header-btn header-btn-logout" onClick={logout}>
@@ -42,7 +51,13 @@ function AppHeader({ onOpenAddStars }) {
             <button type="button" className="header-btn" onClick={() => setRegisterOpen(true)}>
               Register
             </button>
-            <button type="button" className="header-btn" onClick={() => setLoginOpen(true)}>
+            <button
+              type="button"
+              className="header-btn"
+              onClick={() => setLoginOpen(true)}
+              disabled={entriesClosed}
+              title={entriesClosed ? entriesClosedMessage : undefined}
+            >
               Login
             </button>
           </>
@@ -73,9 +88,10 @@ function AppHeader({ onOpenAddStars }) {
 function AppContent() {
   const { user } = useAuth();
   const [addStarsOpen, setAddStarsOpen] = useState(false);
+  const entriesClosed = areEntriesClosed();
 
   const handleOpenAddStars = () => {
-    if (!user) return;
+    if (!user || entriesClosed) return;
     setAddStarsOpen(true);
   };
 

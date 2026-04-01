@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import Leaderboard from '../components/Leaderboard';
 import LoginModal from '../components/LoginModal';
 import RegisterModal from '../components/RegisterModal';
+import { areEntriesClosed, getEntriesClosedMessage } from '../utils/challengeAvailability';
 import '../components/Leaderboard.css';
 import './EmbedPage.css';
 
@@ -10,6 +11,8 @@ function EmbedPage() {
   const { user, login, register } = useAuth();
   const [loginOpen, setLoginOpen] = useState(false);
   const [registerOpen, setRegisterOpen] = useState(false);
+  const entriesClosed = areEntriesClosed();
+  const entriesClosedMessage = getEntriesClosedMessage();
 
   return (
     <div className="embed-page">
@@ -22,7 +25,13 @@ function EmbedPage() {
             <button type="button" className="embed-auth-btn" onClick={() => setRegisterOpen(true)}>
               Register
             </button>
-            <button type="button" className="embed-auth-btn" onClick={() => setLoginOpen(true)}>
+            <button
+              type="button"
+              className="embed-auth-btn"
+              onClick={() => setLoginOpen(true)}
+              disabled={entriesClosed}
+              title={entriesClosed ? entriesClosedMessage : undefined}
+            >
               Login
             </button>
           </>

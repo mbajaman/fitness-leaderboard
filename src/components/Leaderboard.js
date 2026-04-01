@@ -49,6 +49,7 @@ const Leaderboard = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const hideLeaderboard = true;
 
   const fetchLeaderboardData = useCallback(async () => {
     try {
@@ -129,9 +130,13 @@ const Leaderboard = () => {
   }, []);
 
   useEffect(() => {
+    if (hideLeaderboard) {
+      setLoading(false);
+      return;
+    }
     fetchLeaderboardData();
     updateLastUpdated();
-  }, [fetchLeaderboardData, updateLastUpdated]);
+  }, [fetchLeaderboardData, hideLeaderboard, updateLastUpdated]);
 
   const refreshTimerRef = useRef(null);
   const scheduleRefresh = useCallback(() => {
@@ -143,6 +148,7 @@ const Leaderboard = () => {
   }, [fetchLeaderboardData, updateLastUpdated]);
 
   useEffect(() => {
+    if (hideLeaderboard) return undefined;
     // Auto-refresh when the app regains focus (common "background stale" case).
     const onFocus = () => scheduleRefresh();
     const onVisibility = () => {
@@ -154,9 +160,10 @@ const Leaderboard = () => {
       window.removeEventListener('focus', onFocus);
       document.removeEventListener('visibilitychange', onVisibility);
     };
-  }, [scheduleRefresh]);
+  }, [hideLeaderboard, scheduleRefresh]);
 
   useEffect(() => {
+    if (hideLeaderboard) return undefined;
     // Supabase Realtime works fine from GitHub Pages since it's browser→Supabase.
     // This removes the need for manual "Refresh Leaderboard" in most cases.
     const channel = supabase
@@ -173,7 +180,7 @@ const Leaderboard = () => {
       if (refreshTimerRef.current) clearTimeout(refreshTimerRef.current);
       supabase.removeChannel(channel);
     };
-  }, [scheduleRefresh]);
+  }, [hideLeaderboard, scheduleRefresh]);
 
   const formatDateTime = dateTimeStr => {
     if (!dateTimeStr) return 'N/A';
@@ -210,7 +217,20 @@ const Leaderboard = () => {
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
-      {lastUpdated && (
+      {hideLeaderboard ? (
+        <div className="leaderboard-hold-card" role="status" aria-live="polite">
+          <div className="leaderboard-hold-badge">Final entries window</div>
+          <h3>Finish logging your stars before the reveal.</h3>
+          <p>
+            The leaderboard is temporarily hidden while everyone gets their final entries in for
+            March.
+          </p>
+          <p>
+            Double-check your totals, submit anything outstanding, and come back later to see the
+            final results.
+          </p>
+        </div>
+      ) : lastUpdated && (
         <div className="last-updated-container">
           <span className="last-updated-icon">🕒</span>
           <span className="last-updated-text">
@@ -252,16 +272,18 @@ const Leaderboard = () => {
         </div>
       )}
 
-      <button
-        className="refresh-button"
-        onClick={() => {
-          fetchLeaderboardData();
-          updateLastUpdated();
-        }}
-        disabled={loading}
-      >
-        {loading ? 'Refreshing...' : 'Refresh Leaderboard'}
-      </button>
+      {!hideLeaderboard && (
+        <button
+          className="refresh-button"
+          onClick={() => {
+            fetchLeaderboardData();
+            updateLastUpdated();
+          }}
+          disabled={loading}
+        >
+          {loading ? 'Refreshing...' : 'Refresh Leaderboard'}
+        </button>
+      )}
     </div>
   );
 };
