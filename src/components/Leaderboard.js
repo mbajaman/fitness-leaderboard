@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
+import confetti from 'canvas-confetti';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { supabase } from '../db/supabaseClient';
 import './Leaderboard.css';
@@ -49,6 +50,8 @@ const Leaderboard = () => {
   const [lastUpdated, setLastUpdated] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const firstPlaceRowRef = useRef(null);
+  const hasCelebratedWinnerRef = useRef(false);
 
   const fetchLeaderboardData = useCallback(async () => {
     try {
@@ -207,6 +210,64 @@ const Leaderboard = () => {
     return index + 1;
   };
 
+  const launchFirstPlaceCelebration = useCallback(() => {
+    const row = firstPlaceRowRef.current;
+    if (!row) return;
+    if (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+
+    const rect = row.getBoundingClientRect();
+    const viewportWidth = window.innerWidth || 1;
+    const viewportHeight = window.innerHeight || 1;
+    const y = Math.min(Math.max(rect.top / viewportHeight, 0.15), 0.85);
+    const leftX = Math.min(Math.max((rect.left + 8) / viewportWidth, 0.08), 0.45);
+    const rightX = Math.min(Math.max((rect.right - 8) / viewportWidth, 0.55), 0.92);
+    const centerX = Math.min(Math.max((rect.left + rect.width / 2) / viewportWidth, 0.2), 0.8);
+
+    const confettiPalette = ['#ffd700', '#ffec8b', '#fff4bf', '#ff8f00', '#f7c948'];
+    confetti({
+      particleCount: 120,
+      spread: 100,
+      startVelocity: 42,
+      gravity: 0.9,
+      scalar: 1.1,
+      ticks: 220,
+      colors: confettiPalette,
+      origin: { x: centerX, y },
+    });
+    confetti({
+      particleCount: 65,
+      angle: 58,
+      spread: 72,
+      startVelocity: 45,
+      gravity: 0.9,
+      scalar: 1.05,
+      ticks: 200,
+      colors: confettiPalette,
+      origin: { x: leftX, y: Math.min(y + 0.03, 0.92) },
+    });
+    confetti({
+      particleCount: 65,
+      angle: 122,
+      spread: 72,
+      startVelocity: 45,
+      gravity: 0.9,
+      scalar: 1.05,
+      ticks: 200,
+      colors: confettiPalette,
+      origin: { x: rightX, y: Math.min(y + 0.03, 0.92) },
+    });
+  }, []);
+
+  useEffect(() => {
+    if (loading || error || leaderboardData.length === 0) return;
+    if (hasCelebratedWinnerRef.current) return;
+    hasCelebratedWinnerRef.current = true;
+    const timer = setTimeout(() => {
+      launchFirstPlaceCelebration();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [error, launchFirstPlaceCelebration, leaderboardData, loading]);
+
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
@@ -235,7 +296,11 @@ const Leaderboard = () => {
           </div>
 
           {leaderboardData.map((entry, index) => (
-            <div key={entry.id} className={`leaderboard-row ${getMedalClass(index)}`}>
+            <div
+              key={entry.id}
+              ref={index === 0 ? firstPlaceRowRef : undefined}
+              className={`leaderboard-row ${getMedalClass(index)}`}
+            >
               <div className="rank">{getMedalEmoji(index)}</div>
               <div className="name">
                 {entry.name}

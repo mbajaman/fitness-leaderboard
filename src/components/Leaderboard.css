@@ -1,6 +1,6 @@
 .leaderboard-container {
   font-family: var(--font-sans);
-  max-width: 800px;
+  max-width: 880px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -8,9 +8,11 @@
 .leaderboard-container h2 {
   font-family: var(--font-heading);
   text-align: center;
-  margin-bottom: 15px;
-  font-size: 2rem;
+  margin-bottom: 18px;
+  font-size: 2.15rem;
   font-weight: var(--font-weight-semibold);
+  color: #fff5cb;
+  text-shadow: 0 4px 16px rgba(255, 210, 84, 0.2);
 }
 
 /* Last updated styling */
@@ -20,11 +22,11 @@
   justify-content: center;
   margin-bottom: 20px;
   padding: 8px 15px;
-  background-color: #323137;
+  background-color: rgba(255, 255, 255, 0.08);
   border-radius: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
   font-size: 0.9rem;
-  color: #a8b7c5;
+  color: #eef3ff;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -41,26 +43,28 @@
 
 .last-updated-date {
   font-weight: var(--font-weight-semibold);
-  color: #a8b7c5;
+  color: #fff6cf;
   font-style: normal;
 }
 
 .leaderboard {
-  background-color: transparent;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%),
+    rgba(18, 24, 40, 0.4);
+  border-radius: 16px;
+  box-shadow: 0 12px 24px rgba(8, 16, 40, 0.28);
   overflow: hidden;
-  /* TODO: This border goes outside the top 3 color on the left side, it misaligns the row by 1px */
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 .leaderboard-header {
   display: grid;
   grid-template-columns: 80px 8rem 1fr 120px;
-  background-color: transparent;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
   font-weight: var(--font-weight-semibold);
   padding: 15px;
-  border-bottom: 1px solid #e9ecef;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  color: #f9fbff;
 }
 
 .stars-header {
@@ -81,15 +85,16 @@
   display: grid;
   grid-template-columns: 80px 8rem 1fr 120px;
   padding: 15px;
-  border-bottom: 1px solid #e9ecef;
-  border-right: 1px solid #e9ecef;
-  border-left: 1px solid #e9ecef;
-  transition: background-color 0.2s;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  transition:
+    background-color 0.2s,
+    transform 0.2s;
   overflow: hidden;
+  color: #f7faff;
 }
 
 .leaderboard-row:hover {
-  background-color: #f8f9fa1c;
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .leaderboard-row-skeleton:hover {
@@ -98,26 +103,58 @@
 
 /* Dark-theme skeleton placeholders on leaderboard */
 .leaderboard .react-loading-skeleton {
-  --base-color: #323137;
-  --highlight-color: #454850;
+  --base-color: rgba(255, 255, 255, 0.16);
+  --highlight-color: rgba(255, 255, 255, 0.3);
 }
 
 /* Enhanced medal styling */
 .gold-medal {
-  background: linear-gradient(to right, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
-  border-left: 4px solid gold;
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.56) 0%,
+    rgba(255, 232, 120, 0.26) 45%,
+    rgba(255, 247, 188, 0.16) 100%
+  );
+  border-left: 5px solid #ffe066;
   font-weight: var(--font-weight-bold);
+  color: #2e2200;
+  transform: translateY(-1px);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 244, 196, 0.65),
+    0 10px 28px rgba(255, 191, 0, 0.34);
+}
+
+.gold-medal::before,
+.gold-medal::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.15rem;
+  pointer-events: none;
+  animation: party-pop 1.5s ease-in-out infinite;
+  content: '*';
+  color: #ffc400;
+}
+
+.gold-medal::before {
+  left: 12px;
+}
+
+.gold-medal::after {
+  right: 12px;
+  animation-delay: 0.25s;
 }
 
 .silver-medal {
-  background: linear-gradient(to right, rgba(192, 192, 192, 0.2), rgba(192, 192, 192, 0.05));
-  border-left: 4px solid silver;
+  background: linear-gradient(to right, rgba(226, 234, 255, 0.3), rgba(219, 225, 237, 0.12));
+  border-left: 4px solid #e7ecf6;
   font-weight: var(--font-weight-bold);
 }
 
 .bronze-medal {
-  background: linear-gradient(to right, rgba(205, 127, 50, 0.2), rgba(205, 127, 50, 0.05));
-  border-left: 4px solid #cd7f32;
+  background: linear-gradient(to right, rgba(232, 162, 93, 0.35), rgba(213, 136, 58, 0.14));
+  border-left: 4px solid #f0a554;
   font-weight: var(--font-weight-bold);
 }
 
@@ -160,7 +197,7 @@
 .error {
   text-align: center;
   padding: 20px;
-  color: #6c757d;
+  color: #ecf1ff;
 }
 
 .error {
@@ -171,21 +208,23 @@
   display: block;
   margin: 20px auto 0;
   padding: 10px 20px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  background: linear-gradient(120deg, #6b7ea8, #8f9dc1);
+  color: #f8fbff;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 4px;
+  border-radius: 10px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: var(--font-weight-medium);
   transition:
     background 0.2s,
-    border-color 0.2s;
+    border-color 0.2s,
+    transform 0.2s;
 }
 
 .refresh-button:hover:not(:disabled) {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: rgba(255, 255, 255, 0.5);
+  background: linear-gradient(120deg, #7a8db8, #a0afd1);
+  border-color: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
 }
 
 .refresh-button:disabled {
@@ -201,7 +240,7 @@
   }
 
   .leaderboard-container h2 {
-    font-size: 1.5rem;
+    font-size: 1.65rem;
   }
 
   .last-updated-container {
@@ -255,5 +294,17 @@
   .refresh-button {
     padding: 8px 16px;
     font-size: 0.9rem;
+  }
+}
+
+@keyframes party-pop {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateY(-50%) scale(0.9) rotate(0deg);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-50%) scale(1.15) rotate(18deg);
   }
 }
