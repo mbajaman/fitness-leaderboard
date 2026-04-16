@@ -271,6 +271,7 @@ const Leaderboard = () => {
   return (
     <div className="leaderboard-container">
       <h2>Leaderboard</h2>
+      <p className="leaderboard-status-chip">Final Results</p>
       {lastUpdated && (
         <div className="last-updated-container">
           <span className="last-updated-icon">🕒</span>

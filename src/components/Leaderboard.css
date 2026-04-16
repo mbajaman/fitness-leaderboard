@@ -1,6 +1,6 @@
 .leaderboard-container {
   font-family: var(--font-sans);
-  max-width: 880px;
+  max-width: 800px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -8,11 +8,23 @@
 .leaderboard-container h2 {
   font-family: var(--font-heading);
   text-align: center;
-  margin-bottom: 18px;
-  font-size: 2.15rem;
+  margin-bottom: 10px;
+  font-size: 2rem;
   font-weight: var(--font-weight-semibold);
-  color: #fff5cb;
-  text-shadow: 0 4px 16px rgba(255, 210, 84, 0.2);
+}
+
+.leaderboard-status-chip {
+  width: fit-content;
+  margin: 0 auto 16px;
+  padding: 5px 12px;
+  border: 1px solid rgba(255, 215, 0, 0.35);
+  border-radius: 999px;
+  background: rgba(255, 215, 0, 0.08);
+  color: #ffe7a3;
+  font-size: 0.72rem;
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 /* Last updated styling */
@@ -22,11 +34,11 @@
   justify-content: center;
   margin-bottom: 20px;
   padding: 8px 15px;
-  background-color: rgba(255, 255, 255, 0.08);
+  background-color: #323137;
   border-radius: 20px;
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   font-size: 0.9rem;
-  color: #eef3ff;
+  color: #a8b7c5;
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
@@ -43,28 +55,29 @@
 
 .last-updated-date {
   font-weight: var(--font-weight-semibold);
-  color: #fff6cf;
+  color: #a8b7c5;
   font-style: normal;
 }
 
 .leaderboard {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.06) 100%),
-    rgba(18, 24, 40, 0.4);
-  border-radius: 16px;
-  box-shadow: 0 12px 24px rgba(8, 16, 40, 0.28);
+  background-color: transparent;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid #dfe3ea;
 }
 
 .leaderboard-header {
   display: grid;
   grid-template-columns: 80px 8rem 1fr 120px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.07));
+  background-color: rgba(255, 255, 255, 0.03);
   font-weight: var(--font-weight-semibold);
   padding: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
-  color: #f9fbff;
+  border-bottom: 1px solid #e9ecef;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  font-size: 0.82rem;
+  color: #c6cfdd;
 }
 
 .stars-header {
@@ -85,16 +98,17 @@
   display: grid;
   grid-template-columns: 80px 8rem 1fr 120px;
   padding: 15px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  border-left: 1px solid #e9ecef;
   transition:
     background-color 0.2s,
     transform 0.2s;
   overflow: hidden;
-  color: #f7faff;
 }
 
 .leaderboard-row:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
 }
 
 .leaderboard-row-skeleton:hover {
@@ -103,8 +117,8 @@
 
 /* Dark-theme skeleton placeholders on leaderboard */
 .leaderboard .react-loading-skeleton {
-  --base-color: rgba(255, 255, 255, 0.16);
-  --highlight-color: rgba(255, 255, 255, 0.3);
+  --base-color: #323137;
+  --highlight-color: #454850;
 }
 
 /* Enhanced medal styling */
@@ -113,64 +127,89 @@
   background: linear-gradient(
     90deg,
     rgba(255, 215, 0, 0.56) 0%,
-    rgba(255, 232, 120, 0.26) 45%,
-    rgba(255, 247, 188, 0.16) 100%
+    rgba(255, 234, 120, 0.3) 48%,
+    rgba(255, 248, 204, 0.16) 100%
   );
   border-left: 5px solid #ffe066;
   font-weight: var(--font-weight-bold);
   color: #f7faff;
-  transform: translateY(-1px);
   box-shadow:
-    inset 0 0 0 1px rgba(255, 244, 196, 0.65),
-    0 10px 28px rgba(255, 191, 0, 0.34);
-}
-
-.gold-medal::before,
-.gold-medal::after {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.15rem;
-  pointer-events: none;
-  animation: party-pop 1.5s ease-in-out infinite;
-  content: '*';
-  color: #ffc400;
-}
-
-.gold-medal::before {
-  left: 12px;
-}
-
-.gold-medal::after {
-  right: 12px;
-  animation-delay: 0.25s;
+    inset 0 0 0 1px rgba(255, 247, 204, 0.6),
+    0 0 14px rgba(255, 214, 78, 0.28);
+  animation: medal-breathe-gold 2.4s ease-in-out infinite;
 }
 
 .silver-medal {
-  background: linear-gradient(to right, rgba(226, 234, 255, 0.3), rgba(219, 225, 237, 0.12));
-  border-left: 4px solid #e7ecf6;
+  position: relative;
+  background: linear-gradient(to right, rgba(214, 221, 236, 0.4), rgba(214, 221, 236, 0.12));
+  border-left: 5px solid #dce3ef;
   font-weight: var(--font-weight-bold);
+  box-shadow:
+    inset 0 0 0 1px rgba(234, 239, 248, 0.45),
+    0 0 10px rgba(206, 216, 235, 0.2);
+  animation: medal-breathe-silver 2.8s ease-in-out infinite;
 }
 
 .bronze-medal {
-  background: linear-gradient(to right, rgba(232, 162, 93, 0.35), rgba(213, 136, 58, 0.14));
-  border-left: 4px solid #f0a554;
+  position: relative;
+  background: linear-gradient(to right, rgba(215, 133, 71, 0.44), rgba(215, 133, 71, 0.14));
+  border-left: 5px solid #dd9654;
   font-weight: var(--font-weight-bold);
+  box-shadow:
+    inset 0 0 0 1px rgba(233, 181, 138, 0.42),
+    0 0 10px rgba(222, 148, 87, 0.2);
+  animation: medal-breathe-bronze 3s ease-in-out infinite;
+}
+
+.gold-medal > *,
+.silver-medal > *,
+.bronze-medal > * {
+  position: relative;
+  z-index: 1;
+}
+
+.gold-medal::after,
+.silver-medal::after,
+.bronze-medal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    110deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.26) 47%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: translateX(-115%);
+  animation: medal-sheen 5.2s ease-in-out infinite;
+  animation-delay: -0.8s;
+}
+
+.silver-medal::after {
+  animation-delay: -0.35s;
+}
+
+.bronze-medal::after {
+  animation-delay: -0.1s;
 }
 
 .gold-medal .rank {
   color: #ffd700;
   font-size: 1.5rem;
+  text-shadow: 0 0 10px rgba(255, 214, 78, 0.45);
 }
 
 .silver-medal .rank {
-  color: #c0c0c0;
+  color: #d9dfec;
   font-size: 1.5rem;
+  text-shadow: 0 0 8px rgba(217, 223, 236, 0.36);
 }
 
 .bronze-medal .rank {
-  color: #cd7f32;
+  color: #df9a5a;
   font-size: 1.5rem;
+  text-shadow: 0 0 8px rgba(223, 154, 90, 0.35);
 }
 
 .rank {
@@ -197,7 +236,7 @@
 .error {
   text-align: center;
   padding: 20px;
-  color: #ecf1ff;
+  color: #6c757d;
 }
 
 .error {
@@ -208,10 +247,10 @@
   display: block;
   margin: 20px auto 0;
   padding: 10px 20px;
-  background: linear-gradient(120deg, #6b7ea8, #8f9dc1);
-  color: #f8fbff;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
   border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 10px;
+  border-radius: 4px;
   cursor: pointer;
   font-size: 1rem;
   font-weight: var(--font-weight-medium);
@@ -222,8 +261,8 @@
 }
 
 .refresh-button:hover:not(:disabled) {
-  background: linear-gradient(120deg, #7a8db8, #a0afd1);
-  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
   transform: translateY(-1px);
 }
 
@@ -240,7 +279,12 @@
   }
 
   .leaderboard-container h2 {
-    font-size: 1.65rem;
+    font-size: 1.5rem;
+  }
+
+  .leaderboard-status-chip {
+    margin-bottom: 14px;
+    font-size: 0.68rem;
   }
 
   .last-updated-container {
@@ -297,14 +341,56 @@
   }
 }
 
-@keyframes party-pop {
+@keyframes medal-sheen {
+  0% {
+    transform: translateX(-115%);
+  }
+  55% {
+    transform: translateX(-115%);
+  }
+  100% {
+    transform: translateX(130%);
+  }
+}
+
+@keyframes medal-breathe-gold {
   0%,
   100% {
-    opacity: 0.55;
-    transform: translateY(-50%) scale(0.9) rotate(0deg);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 247, 204, 0.55),
+      0 0 10px rgba(255, 214, 78, 0.2);
   }
   50% {
-    opacity: 1;
-    transform: translateY(-50%) scale(1.15) rotate(18deg);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 247, 204, 0.8),
+      0 0 18px rgba(255, 214, 78, 0.35);
+  }
+}
+
+@keyframes medal-breathe-silver {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 1px rgba(234, 239, 248, 0.35),
+      0 0 8px rgba(206, 216, 235, 0.14);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgba(234, 239, 248, 0.62),
+      0 0 14px rgba(206, 216, 235, 0.25);
+  }
+}
+
+@keyframes medal-breathe-bronze {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 0 0 1px rgba(233, 181, 138, 0.32),
+      0 0 8px rgba(222, 148, 87, 0.13);
+  }
+  50% {
+    box-shadow:
+      inset 0 0 0 1px rgba(233, 181, 138, 0.54),
+      0 0 14px rgba(222, 148, 87, 0.24);
   }
 }

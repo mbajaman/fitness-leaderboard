@@ -20,7 +20,7 @@ body {
   font-weight: var(--font-weight-normal);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-image: linear-gradient(180deg, #262832 0%, #323542 54%, #3a3d4b 100%);
+  background-image: linear-gradient(180deg, #222325 0%, #323137 100%);
   color: #fff;
 }
 

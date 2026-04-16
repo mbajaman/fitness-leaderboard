@@ -2,20 +2,18 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background-image: radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 48%);
 }
 
 .App-header {
-  background: linear-gradient(135deg, #343746 0%, #3f4254 100%);
+  background-color: #323137;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
-  padding: 52px 20px 42px;
+  padding: 40px 20px;
   text-align: center;
   position: relative;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.28);
 }
 
 .App-header h1 {
@@ -31,17 +29,15 @@
 }
 
 .App-header p {
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   font-size: 1.2rem;
   font-weight: var(--font-weight-normal);
-  opacity: 0.92;
+  opacity: 0.8;
   width: 100%;
 }
 
 .logo {
-  font-size: 1.3rem;
-  color: #ffe082;
-  text-shadow: 0 0 10px rgba(255, 210, 84, 0.6);
+  font-size: 1.5rem;
 }
 
 main {
@@ -50,7 +46,7 @@ main {
 }
 
 footer {
-  background: linear-gradient(135deg, #323544 0%, #3a3d4d 100%);
+  background-color: #323137;
   color: white;
   text-align: center;
   padding: 20px;
